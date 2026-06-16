@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti, con amor y despedida</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap');
+        
+        :root {
+            --color-rosa-suave: #ffd6e0;
+            --color-rosa-intenso: #ff4d6d;
+            --color-lila: #e0aaff;
+            --color-fondo: #fff5f8;
+            --color-texto: #594e6b;
+            --color-destacado: #b56576;
+            --color-brillo: #ffb3c1;
+            --color-claro: #fff0f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, var(--color-fondo), var(--color-lila), var(--color-rosa-suave));
+            background-size: 400% 400%;
+            animation: fondoMovido 15s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes fondoMovido {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .titulo-cursiva {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Animación principal de latido */
+        .corazon-grande {
+            color: var(--color-rosa-intenso);
+            font-size: 4rem;
+            animation: latidoFuerte 1.2s infinite alternate ease-in-out;
+            filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.5));
+        }
+
+        @keyframes latidoFuerte {
+            from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.5)); }
+            to { transform: scale(1.3); filter: drop-shadow(0 0 20px rgba(255, 77, 109, 0.8)); }
+        }
+
+        /* Corazones flotantes decorativos */
+        .corazon-flotante {
+            position: fixed;
+            color: var(--color-rosa-intenso);
+            font-size: 1.2rem;
+            pointer-events: none;
+            animation: subirFlotar 8s linear infinite;
+            opacity: 0;
+            z-index: 0;
+        }
+
+        @keyframes subirFlotar {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.7; }
+            85% { opacity: 0.7; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Corazones pequeños que giran */
+        .corazon-giratorio {
+            position: absolute;
+            color: var(--color-brillo);
+            font-size: 1.5rem;
+            animation: girar 6s linear infinite;
+        }
+
+        @keyframes girar {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tarjeta principal con más estilo */
+        .carta {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            box-shadow: 
+                0 8px 32px rgba(181, 101, 118, 0.25),
+                inset 0 0 15px rgba(255, 255, 255, 0.6);
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .carta:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 
+                0 15px 40px rgba(181, 101, 118, 0.3),
+                inset 0 0 15px rgba(255, 255, 255, 0.6);
+        }
+
+        /* Estilo para el video mejorado */
+        .contenedor-video {
+            width: 100%;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(181, 101, 118, 0.2);
+            margin: 2rem 0;
+            border: 3px solid rgba(255, 214, 224, 0.6);
+            transition: transform 0.3s ease;
+        }
+
+        .contenedor-video:hover {
+            transform: scale(1.02);
+        }
+
+        .contenedor-video video {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            border: none;
+            display: block;
+        }
+
+        /* ✨ ESTILO PARA LA SECCIÓN DE FOTOS */
+        .contenedor-fotos {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 2px dashed rgba(181, 101, 118, 0.3);
+        }
+
+        .grilla-fotos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .foto-item {
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border: 3px solid white;
+        }
+
+        .foto-item:hover {
+            transform: scale(1.05);
+        }
+
+        .foto-item img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Resaltado especial en el texto */
+        .texto-destacado {
+            background: linear-gradient(120deg, var(--color-rosa-suave) 0%, var(--color-lila) 100%);
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            display: inline-block;
+            font-weight: 600;
+            color: var(--color-destacado);
+            box-shadow: 0 2px 8px rgba(181, 101, 118, 0.15);
+        }
+
+        .frase-especial {
+            font-size: 1.8rem !important;
+            color: var(--color-destacado);
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .frase-especial::before,
+        .frase-especial::after {
+            content: '❤️';
+            font-size: 1.2rem;
+            margin: 0 0.5rem;
+        }
+
+        /* Efecto de brillo en texto */
+        .brillo {
+            animation: brillar 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes brillar {
+            from { text-shadow: 0 0 5px rgba(255, 77, 109, 0.3); }
+            to { text-shadow: 0 0 15px rgba(255, 77, 109, 0.6), 0 0 30px rgba(224, 170, 255, 0.4); }
+        }
+
+        /* Secciones especiales */
+        .seccion-bonito {
+            background: rgba(255, 214, 224, 0.3);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--color-rosa-intenso);
+            text-align: left;
+        }
+
+        .seccion-mal {
+            background: rgba(224, 170, 255, 0.25);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 4px solid #9d4edd;
+            text-align: left;
+        }
+
+        .titulo-seccion {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.6rem;
+            color: var(--color-destacado);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Estilo para la parte interactiva mejorada */
+        .contenedor-indicador {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: inset 0 0 10px rgba(181, 101, 118, 0.1);
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        .corazon-indicador {
+            font-size: 3rem; /* Tamaño inicial */
+            color: #ddd;
+            transition: all 0.4s ease;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 5px rgba(255, 77, 109, 0.2));
+            transform-origin: center;
+        }
+
+        .corazon-indicador.lleno {
+            color: var(--color-rosa-intenso);
+            filter: drop-shadow(0 0 15px rgba(255, 77, 109, 0.8)) drop-shadow(0 0 30px rgba(224, 170, 255, 0.6));
+        }
+
+        .control {
+            width: 85%;
+            height: 12px;
+            border-radius: 10px;
+            background: linear-gradient(to right, #ffd6e0, #e0aaff);
+            outline: none;
+            -webkit-appearance: none;
+            margin: 1rem 0;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        .control::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--color-rosa-intenso);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.7);
+            border: 2px solid white;
+        }
+
+        .mensaje-indicador {
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--color-destacado);
+            font-style: italic;
+            transition: all 0.3s ease;
+            min-height: 40px;
+        }
+
+        .extra-item {
+            margin-top: 1rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #9d4edd;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .mostrar {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center px-4 py-16">
+
+    <!-- Corazones flotantes de fondo -->
+    <div id="corazonesFondo"></div>
+
+    <!-- Corazones giratorios decorativos -->
+    <div class="corazon-giratorio" style="top: 10%; left: 10%; font-size: 2rem;"></div>
+    <div class="corazon-giratorio" style="top: 20%; right: 15%; font-size: 1.8rem; animation-duration: 7s;"></div>
+    <div class="corazon-giratorio" style="bottom: 15%; left: 15%; font-size: 2.2rem; animation-duration: 9s;"></div>
+    <div class="corazon-giratorio" style="bottom: 10%; right: 10%; font-size: 1.7rem; animation-duration: 8s;"></div>
+
+    <div class="carta p-8 md:p-12 text-center relative">
+        <h1 class="titulo-cursiva text-[clamp(2.5rem,6vw,4rem)] text-[var(--color-destacado)] mb-4 brillo">
+            Para ti, siempre
+        </h1>
+        
+        <div class="corazon-grande mb-8">
+            <i class="fa fa-heart"></i>
+        </div>
+
+        <div class="text-[var(--color-texto)] text-lg md:text-xl leading-relaxed space-y-6">
+            <p>Quería dejarte algo que siempre pudieras encontrar, algo que esté aquí igual que yo: <span class="texto-destacado">sin prisas, sin exigencias, solo con amor y con este adiós que cuido tanto.</span></p>
+
+            <p>Sé que llevas dentro cosas que a veces pesan mucho, y entiendo perfectamente que te alejaste para no lastimarme. Por eso te digo adiós con el corazón tranquilo, porque sé que lo haces cuidando de ti, y eso es lo que más me importa. <strong>Tu bienestar es lo más valioso, y por eso este adiós es con respeto y cariño infinito.</strong></p>
+
+
+            <!-- ✅ ESPACIO PARA TU VIDEO MP4 -->
+            <div class="contenedor-video">
+                <video controls poster="">
+                    <!-- 👇 AQUÍ PONES EL NOMBRE DE TU ARCHIVO 👇 -->
+                    <source src="copy_3BAF7A19-421F-4B1D-B9C9-7D0DCA950CAB.mp4" type="video/mp4">
+                    Tu navegador no soporta el video, pero sé que lo verás desde el corazón.
+                </video>
+            </div>
+            <!-- FIN DEL ESPACIO PARA TU VIDEO -->
+
+
+            <!-- ✨ ESPACIO PARA TUS FOTOS -->
+            <div class="contenedor-fotos">
+                <h3 class="titulo-seccion justify-center">📸 Nuestros recuerdos</h3>
+                <div class="grilla-fotos">
+                    <!-- 👇 AQUÍ AGREGAS TUS FOTOS, DUPLICA ESTE BLOQUE POR CADA FOTO 👇 -->
+                    <div class="foto-item">
+                        <img src="1B995113-0808-4FD2-A122-1094D4472871.JPG" alt="Recuerdo bonito">
+                    </div>
+                    <div class="foto-item">
+                        <img src="IMG_1163.jpg" alt="Nosotros">
+                    </div>
+                    <div class="foto-item">
+                        <img src="IMG_1164.jpg" alt="Momentos juntos">
+                    </div>
+                    <div class="foto-item">
+                        <img src="IMG_1165.jpg" alt="Sonrisas">
+                    </div>
+                    <!-- 👆 AGREGA MÁS FOTOS COPIANDO ESE BLOQUE 👆 -->
+                </div>
+            </div>
+            <!-- FIN DE LA SECCIÓN DE FOTOS -->
+
+
+            <!-- ✨ SECCIÓN: LO BONITO QUE FUIMOS -->
+            <div class="seccion-bonito">
+                <h3 class="titulo-seccion">💖 Lo bonito que fuimos</h3>
+                <p>Quiero que nunca olvides todo lo hermoso que vivimos fuimos risas que salían solas y momentos que se quedaron guardados en el alma. Cada vez que compartimos tiempo, cada palabra, cada abrazo y cada mirada fueron reales, sinceros y llenos de amor.</p>
+                <p style="margin-top: 0.5rem;">Lo que construimos juntos fue único y especial. No importa el tiempo que pase ni que hoy nos digamos adiós; lo bonito que fuimos nadie lo puede borrar, porque quedó grabado en mi corazón y sé que también en el tuyo. Fuimos dos personas que se quisieron bonito, y eso es algo que dura para siempre.</p>
+            </div>
+
+
+            <!-- ✨ SECCIÓN: CUANDO TE SIENTAS MAL -->
+            <div class="seccion-mal">
+                <h3 class="titulo-seccion"> Cuando te sientas mal</h3>
+                <p>Si algún día sientes que todo pesa demasiado, que tus emociones te ganan o que el mundo se siente oscuro, ven y lee esto. Quiero que sepas que no estás sola, aunque nuestros caminos se separen. Entiendo tus días difíciles, entiendo que necesites tu espacio, y te valoro igual o más que el primer día.</p>
+                <p style="margin-top: 0.5rem;">No te culpes por sentir, ni por necesitar tiempo. Eres humana y maravillosa tal como eres. Recuerda que aunque no esté físicamente, te llevo siempre en mi pensamiento. Respira profundo, date paciencia y recuerda: <strong>fuiste, eres y serás siempre alguien muy especial para mí, y te deseo lo mejor, hoy y siempre.</strong></p>
+            </div>
+
+
+            <!-- ✨ INDICADOR INTERACTIVO: AHORA ES DE DESPEDIDA Y RECUERDOS -->
+            <div class="contenedor-indicador">
+                <h3 class="titulo-seccion justify-center">✨ Muévelo y lee todo lo que te dejo</h3>
+                
+                <div id="corazonIndicador" class="corazon-indicador">
+                    <i class="fa fa-heart"></i>
+                </div>
+
+                <input type="range" min="0" max="100" value="0" class="control" id="controlAmor">
+
+                <div id="mensajeIndicador" class="mensaje-indicador">
+                    Empieza a moverlo despacio... aquí te dejo mi despedida
+                </div>
+
+                <!-- Aquí aparecen los mensajes de despedida -->
+                <div id="cosaExtra" class="extra-item"></div>
+            </div>
+
+
+            <p>Te agradezco por todo lo que compartimos, por lo que me enseñaste y por haber sido parte de mi vida. No te pido nada, solo quiero que recuerdes esto siempre:</p>
+
+            <p class="titulo-cursiva frase-especial my-8">
+                Aquí estaré siempre en el recuerdo<br>te deseo paz, te deseo luz y te deseo vida<br>tan bonita como tú te mereces.
+            </p>
+
+            <p>Esta página está llena de corazones, igual que mi recuerdo está siempre lleno de ti. Entra cuando quieras, cuando necesites un abrazo, cuando te sientas triste o simplemente cuando quieras recordar que <span class="texto-destacado">alguien te quiso de verdad, y te dice adiós con todo su corazón.</span></p>
+
+            <p class="text-base mt-10 italic text-[var(--color-destacado)] opacity-90">— Alguien que nunca dejará de ver lo increíble, valiosa y hermosa que eres</p>
+        </div>
+    </div>
+
+    <script>
+        // Crear MUCHOS corazones flotantes de fondo
+        const contenedorCorazones = document.getElementById('corazonesFondo');
+        const cantidadCorazones = 25;
+
+        for(let i = 0; i < cantidadCorazones; i++) {
+            let corazon = document.createElement('div');
+            corazon.classList.add('corazon-flotante');
+            corazon.innerHTML = '❤️';
+            
+            corazon.style.left = `${Math.random() * 100}vw`;
+            corazon.style.animationDelay = `${Math.random() * 8}s`;
+            corazon.style.animationDuration = `${6 + Math.random() * 5}s`;
+            corazon.style.fontSize = `${0.8 + Math.random() * 1.5}rem`;
+            
+            contenedorCorazones.appendChild(corazon);
+        }
+
+        // Efecto al hacer clic: llueven corazones ✨
+        document.addEventListener('click', (e) => {
+            for(let i = 0; i < 8; i++) {
+                let corazonClick = document.createElement('div');
+                corazonClick.innerHTML = '💖';
+                corazonClick.style.position = 'absolute';
+                corazonClick.style.left = `${e.pageX + (Math.random() * 40 - 20)}px`;
+                corazonClick.style.top = `${e.pageY + (Math.random() * 40 - 20)}px`;
+                corazonClick.style.fontSize = `${1 + Math.random() * 1.2}rem`;
+                corazonClick.style.pointerEvents = 'none';
+                corazonClick.style.transition = 'all 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67)';
+                corazonClick.style.opacity = '1';
+                document.body.appendChild(corazonClick);
+
+                setTimeout(() => {
+                    const angulo = Math.random() * Math.PI * 2;
+                    const distancia = 100 + Math.random() * 150;
+                    corazonClick.style.transform = `translate(${Math.cos(angulo) * distancia}px, ${-Math.sin(angulo) * distancia}px) rotate(${Math.random() * 360}deg)`;
+                    corazonClick.style.opacity = '0';
+                }, 10);
+
+                setTimeout(() => corazonClick.remove(), 1500);
+            }
+        });
+
+        // Efecto especial: latido suave del fondo cada 3 segundos
+        setInterval(() => {
+            document.body.style.background = 'linear-gradient(135deg, #fff5f8, #f3e0ff, #ffd6e0)';
+            setTimeout(() => {
+                document.body.style.background = 'linear-gradient(135deg, var(--color-fondo), var(--color-lila), var(--color-rosa-suave))';
+            }, 500);
+        }, 3000);
+
+
+        // ✨ FUNCIONALIDAD INTERACTIVA: AHORA ES DE DESPEDIDA
+        const control = document.getElementById('controlAmor');
+        const corazonIndicador = document.getElementById('corazonIndicador');
+        const mensajeIndicador = document.getElementById('mensajeIndicador');
+        const cosaExtra = document.getElementById('cosaExtra');
+
+        // 📜 MENSAJES NUEVOS: DE DESPEDIDA, RECUERDOS Y AGRADECIMIENTO
+        const datosInteractivos = [
+            {
+                mensaje: "Aquí empieza todo lo que te quiero decir al despedirme...",
+                extra: " Gracias por haber llegado a mi vida"
+            },
+            {
+                mensaje: "Cada recuerdo queda guardado aquí, intacto y bonito",
+                extra: " Lo vivido nadie lo borra"
+            },
+            {
+                mensaje: "Me voy tranquilo porque sé que lo hicimos bien",
+                extra: "Fuiste lo más bonito que me pasó"
+            },
+            {
+                mensaje: "Te deseo todo lo bueno que te mereces, y es mucho",
+                extra: " Que seas muy feliz, siempre"
+            },
+            {
+                mensaje: "Aunque caminemos por rumbos distintos, te llevo conmigo",
+                extra: "Un abrazo eterno y con cariño"
+            },
+            {
+                mensaje: "Adiós no es olvido, es solo un hasta luego en el recuerdo",
+                extra: " Gracias por cada momento"
+            },
+            {
+                mensaje: "Este corazón creció contigo, y se queda con lo mejor de ti",
+                extra: "Siempre serás especial para mí"
+            },
+            {
+                mensaje: "Te dejo en paz y te dejo todo mi cariño",
+                extra: " Lo bonito queda para siempre"
+            },
+            {
+                mensaje: "Gracias por todo lo bonito",
+                extra: " Sé feliz"
+            },
+            {
+                mensaje: "Y al final de todo... gracias, y adiós con todo mi corazón",
+                extra: "💖 Te deseo lo mejor de todo corazón"
+            }
+        ];
+
+        control.addEventListener('input', function() {
+            const valor = parseInt(this.value);
+            const etapa = Math.floor(valor / 10); // 0 a 9
+
+            // 📏 EL CORAZÓN SE HACE MÁS GRANDE CONFORME LO MUEVE
+            const tamano = 3 + (valor / 100) * 12; // Empieza en 3rem y llega hasta 15rem
+            corazonIndicador.style.fontSize = `${tamano}rem`;
+
+            // Cambiar color y brillo
+            if(valor > 0) {
+                corazonIndicador.classList.add('lleno');
+            } else {
+                corazonIndicador.classList.remove('lleno');
+            }
+
+            // 📝 CAMBIAR MENSAJE DE DESPEDIDA
+            if(etapa >= 0 && etapa < datosInteractivos.length) {
+                mensajeIndicador.textContent = datosInteractivos[etapa].mensaje;
+                
+                // Mostrar la frase extra con animación
+                cosaExtra.classList.remove('mostrar');
+                setTimeout(() => {
+                    cosaExtra.textContent = datosInteractivos[etapa].extra;
+                    cosaExtra.classList.add('mostrar');
+                }, 150);
+            }
+
+            // 💓 EFECTO ESPECIAL AL LLEGAR AL FINAL
+            if(valor >= 95) {
+                corazonIndicador.style.animation = 'latidoFuerte 0.8s infinite alternate';
+                mensajeIndicador.style.fontSize = '1.4rem';
+                mensajeIndicador.style.color = '#ff4d6d';
+                cosaExtra.style.fontSize = '1.8rem';
+            } else {
+                corazonIndicador.style.animation = 'none';
+                mensajeIndicador.style.fontSize = '1.1rem';
+                mensajeIndicador.style.color = 'var(--color-destacado)';
+                cosaExtra.style.fontSize = '1.3rem';
+            }
+        });
+
+    </script>
+</body>
+</html>
