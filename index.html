@@ -3,22 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para ti, con amor y despedida</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <title>Para ti, con amor y esperanza</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Open+Sans:wght@300;400;600&display=swap');
-        
-        :root {
-            --color-rosa-suave: #ffd6e0;
-            --color-rosa-intenso: #ff4d6d;
-            --color-lila: #e0aaff;
-            --color-fondo: #fff5f8;
-            --color-texto: #594e6b;
-            --color-destacado: #b56576;
-            --color-brillo: #ffb3c1;
-            --color-claro: #fff0f5;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Crimson+Text:ital@0;1&display=swap');
 
         * {
             margin: 0;
@@ -26,542 +14,2401 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --rosa-intenso: #ff4d6d;
+            --rosa-suave: #ffd6e0;
+            --lila: #e0aaff;
+            --lila-oscuro: #9d4edd;
+            --oro: #f4c430;
+            --fondo: #fff5f8;
+            --texto: #594e6b;
+            --texto-claro: #8b7a9e;
+            --blanco: #ffffff;
+            --sombra: rgba(181, 101, 118, 0.15);
+            --sombra-fuerte: rgba(181, 101, 118, 0.25);
+            --verde-esperanza: #2ecc71;
+            --azul-calma: #3498db;
+            --noche: #2b2350;
+            --noche-profunda: #1a1538;
+            --dorado-brillo: #ffe49c;
+            --sombra-dorada: rgba(244, 196, 48, 0.35);
+        }
+
         body {
-            font-family: 'Open Sans', sans-serif;
-            background: linear-gradient(135deg, var(--color-fondo), var(--color-lila), var(--color-rosa-suave));
-            background-size: 400% 400%;
-            animation: fondoMovido 15s ease infinite;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--fondo) 0%, #f9e8f5 50%, #f0e6ff 100%);
             min-height: 100vh;
+            color: var(--texto);
             overflow-x: hidden;
             position: relative;
         }
 
-        @keyframes fondoMovido {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .titulo-cursiva {
-            font-family: 'Dancing Script', cursive;
-        }
-
-        /* Animación principal de latido */
-        .corazon-grande {
-            color: var(--color-rosa-intenso);
-            font-size: 4rem;
-            animation: latidoFuerte 1.2s infinite alternate ease-in-out;
-            filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.5));
-        }
-
-        @keyframes latidoFuerte {
-            from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.5)); }
-            to { transform: scale(1.3); filter: drop-shadow(0 0 20px rgba(255, 77, 109, 0.8)); }
-        }
-
-        /* Corazones flotantes decorativos */
-        .corazon-flotante {
+        /* Canvas 3D */
+        #canvas3d {
             position: fixed;
-            color: var(--color-rosa-intenso);
-            font-size: 1.2rem;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             pointer-events: none;
-            animation: subirFlotar 8s linear infinite;
-            opacity: 0;
-            z-index: 0;
         }
 
-        @keyframes subirFlotar {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            15% { opacity: 0.7; }
-            85% { opacity: 0.7; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-
-        /* Corazones pequeños que giran */
-        .corazon-giratorio {
-            position: absolute;
-            color: var(--color-brillo);
-            font-size: 1.5rem;
-            animation: girar 6s linear infinite;
-        }
-
-        @keyframes girar {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Tarjeta principal con más estilo */
-        .carta {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border-radius: 2.5rem;
-            box-shadow: 
-                0 8px 32px rgba(181, 101, 118, 0.25),
-                inset 0 0 15px rgba(255, 255, 255, 0.6);
-            max-width: 700px;
-            width: 100%;
+        .contenedor-principal {
             position: relative;
-            z-index: 10;
-            transform-style: preserve-3d;
-            transition: all 0.5s ease;
-            border: 2px solid rgba(255, 255, 255, 0.4);
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
         }
 
-        .carta:hover {
-            transform: translateY(-8px) rotateX(5deg);
-            box-shadow: 
-                0 15px 40px rgba(181, 101, 118, 0.3),
-                inset 0 0 15px rgba(255, 255, 255, 0.6);
+        /* VISTA 1: PÁGINA PRINCIPAL */
+        #vista-principal {
+            display: block;
         }
 
-        /* Estilo para el video mejorado */
-        .contenedor-video {
-            width: 100%;
+        #vista-diario {
+            display: none;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: aparecer 1s ease-out;
+        }
+
+        .titulo-principal {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            color: var(--rosa-intenso);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            text-shadow: 0 4px 15px rgba(255, 77, 109, 0.2);
+            animation: flotarSuave 3s ease-in-out infinite;
+        }
+
+        .icono-corazon-flotante {
+            display: inline-block;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: latidoElegante 1.5s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+        }
+
+        /* BOTONES DE NAVEGACIÓN */
+        .nav-botones {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: aparecer 1.2s ease-out 0.3s backwards;
+        }
+
+        .boton-nav {
+            padding: 0.9rem 2rem;
+            border: none;
             border-radius: 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .boton-principal {
+            background: linear-gradient(135deg, var(--rosa-intenso), var(--lila-oscuro));
+            color: white;
+        }
+
+        .boton-principal:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(255, 77, 109, 0.3);
+        }
+
+        .boton-diario {
+            background: linear-gradient(135deg, var(--verde-esperanza), var(--azul-calma));
+            color: white;
+        }
+
+        .boton-diario:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(46, 204, 113, 0.3);
+        }
+
+        .boton-volver {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--texto);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(181, 101, 118, 0.2);
+        }
+
+        .boton-volver:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px);
+        }
+
+        /* TARJETA PRINCIPAL */
+        .tarjeta {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border-radius: 2.5rem;
+            padding: 3rem;
+            box-shadow: 
+                0 20px 50px rgba(181, 101, 118, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 6px 20px rgba(181, 101, 118, 0.2);
-            margin: 2rem 0;
-            border: 3px solid rgba(255, 214, 224, 0.6);
-            transition: transform 0.3s ease;
+            animation: aparecer 1.2s ease-out 0.2s backwards;
+        }
+
+        .tarjeta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+
+        .contenido-texto {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--texto);
+        }
+
+        .parrafo {
+            margin-bottom: 1.8rem;
+            animation: aparecer 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .parrafo:nth-child(1) { animation-delay: 0.4s; }
+        .parrafo:nth-child(2) { animation-delay: 0.6s; }
+        .parrafo:nth-child(3) { animation-delay: 0.8s; }
+
+        .texto-destacado {
+            background: linear-gradient(120deg, var(--rosa-suave), var(--lila));
+            padding: 0.4rem 1rem;
+            border-radius: 1.2rem;
+            display: inline-block;
+            font-weight: 600;
+            color: var(--lila-oscuro);
+            box-shadow: 0 4px 15px rgba(181, 101, 118, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .texto-destacado:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(181, 101, 118, 0.25);
+        }
+
+        /* SECCIONES */
+        .seccion {
+            border-radius: 2rem;
+            padding: 2.5rem;
+            margin: 2.5rem 0;
+            border-left: 5px solid;
+            animation: aparecerDesdeIzquierda 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .seccion:nth-child(4) { animation-delay: 1s; }
+        .seccion:nth-child(5) { animation-delay: 1.2s; }
+        .seccion:nth-child(6) { animation-delay: 1.4s; }
+
+        .seccion-bonita {
+            background: linear-gradient(135deg, rgba(255, 214, 224, 0.3), rgba(255, 240, 245, 0.5));
+            border-color: var(--rosa-intenso);
+        }
+
+        .seccion-reflexion {
+            background: linear-gradient(135deg, rgba(224, 170, 255, 0.2), rgba(240, 230, 255, 0.4));
+            border-color: var(--lila-oscuro);
+        }
+
+        .titulo-seccion {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: var(--lila-oscuro);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* CONTENEDOR VIDEO */
+        .contenedor-video {
+            margin: 2.5rem 0;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(181, 101, 118, 0.2);
+            border: 3px solid rgba(255, 214, 224, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: aparecer 1s ease-out;
         }
 
         .contenedor-video:hover {
-            transform: scale(1.02);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(181, 101, 118, 0.3);
         }
 
         .contenedor-video video {
             width: 100%;
             height: auto;
-            aspect-ratio: 16 / 9;
-            border: none;
             display: block;
+            background: var(--texto);
         }
 
-        /* ✨ ESTILO PARA LA SECCIÓN DE FOTOS */
+        /* GALERÍA DE FOTOS */
         .contenedor-fotos {
             background: rgba(255, 255, 255, 0.5);
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border: 2px dashed rgba(181, 101, 118, 0.3);
+            border-radius: 2rem;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            border: 2px dashed rgba(181, 101, 118, 0.2);
+            animation: aparecer 1s ease-out;
         }
 
-        .grilla-fotos {
+        .titulo-galeria {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: var(--texto);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .galeria-fotos {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            animation: aparecer 1s ease-out;
         }
 
         .foto-item {
-            border-radius: 1rem;
+            border-radius: 1.5rem;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            border: 3px solid white;
+            box-shadow: 0 8px 20px rgba(181, 101, 118, 0.15);
+            aspect-ratio: 1;
+            border: 4px solid var(--blanco);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .foto-item:hover {
-            transform: scale(1.05);
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(181, 101, 118, 0.25);
         }
 
         .foto-item img {
             width: 100%;
-            height: 140px;
+            height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform 0.4s ease;
         }
 
-        /* Resaltado especial en el texto */
-        .texto-destacado {
-            background: linear-gradient(120deg, var(--color-rosa-suave) 0%, var(--color-lila) 100%);
-            padding: 0.3rem 0.8rem;
-            border-radius: 1rem;
-            display: inline-block;
-            font-weight: 600;
-            color: var(--color-destacado);
-            box-shadow: 0 2px 8px rgba(181, 101, 118, 0.15);
+        .foto-item:hover img {
+            transform: scale(1.1);
         }
 
+        /* SLIDER INTERACTIVO */
+        .contenedor-slider {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 2.5rem;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: inset 0 0 20px rgba(181, 101, 118, 0.08);
+            animation: aparecer 1s ease-out;
+        }
+
+        .titulo-slider {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: var(--lila-oscuro);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .corazon-indicador {
+            font-size: 4rem;
+            text-align: center;
+            margin: 1.5rem 0;
+            filter: drop-shadow(0 4px 12px rgba(255, 77, 109, 0.3));
+            transition: all 0.3s ease;
+            color: #e0e0e0;
+        }
+
+        .corazon-indicador.activo {
+            color: var(--rosa-intenso);
+            filter: drop-shadow(0 0 20px rgba(255, 77, 109, 0.7)) drop-shadow(0 0 40px rgba(224, 170, 255, 0.5));
+            animation: latidoFuerte 0.8s ease-in-out infinite;
+        }
+
+        .slider-control {
+            width: 100%;
+            height: 14px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--rosa-suave) 0%, var(--lila) 100%);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 2rem 0;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .slider-control::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--rosa-intenso), var(--lila-oscuro));
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 77, 109, 0.6);
+            border: 2px solid var(--blanco);
+            transition: all 0.2s ease;
+        }
+
+        .slider-control::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
+
+        .slider-control::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--rosa-intenso), var(--lila-oscuro));
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 77, 109, 0.6);
+            border: 2px solid var(--blanco);
+            transition: all 0.2s ease;
+        }
+
+        .mensaje-slider {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--lila-oscuro);
+            margin: 2rem 0 1rem;
+            font-style: italic;
+            min-height: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .extra-mensaje {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.6rem;
+            color: var(--rosa-intenso);
+            margin: 1rem 0 0;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 30px;
+        }
+
+        .extra-mensaje.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* FRASE ESPECIAL */
         .frase-especial {
-            font-size: 1.8rem !important;
-            color: var(--color-destacado);
-            font-weight: bold;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            position: relative;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            text-align: center;
+            color: var(--rosa-intenso);
+            margin: 3rem 0;
+            line-height: 1.8;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(255, 77, 109, 0.15);
+            animation: aparecer 1.2s ease-out 1s backwards;
         }
 
         .frase-especial::before,
         .frase-especial::after {
-            content: '❤️';
-            font-size: 1.2rem;
-            margin: 0 0.5rem;
+            content: '💖';
+            display: block;
+            font-size: 1.8rem;
+            margin: 0.5rem 0;
+            animation: latidoElegante 1.5s ease-in-out infinite;
         }
 
-        /* Efecto de brillo en texto */
-        .brillo {
-            animation: brillar 2s ease-in-out infinite alternate;
+        /* FIRMA */
+        .firma {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px dashed rgba(181, 101, 118, 0.2);
+            font-style: italic;
+            color: var(--texto-claro);
+            font-size: 1rem;
+            animation: aparecer 1.5s ease-out 1.2s backwards;
         }
 
-        @keyframes brillar {
-            from { text-shadow: 0 0 5px rgba(255, 77, 109, 0.3); }
-            to { text-shadow: 0 0 15px rgba(255, 77, 109, 0.6), 0 0 30px rgba(224, 170, 255, 0.4); }
+        /* ============================================ */
+        /* VISTA DEL DIARIO - ESTILOS */
+        /* ============================================ */
+
+        .diario-container {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            border-radius: 2.5rem;
+            padding: 3rem;
+            box-shadow: 0 20px 50px rgba(46, 204, 113, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            animation: aparecer 0.8s ease-out;
         }
 
-        /* Secciones especiales */
-        .seccion-bonito {
-            background: rgba(255, 214, 224, 0.3);
+        .diario-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(46, 204, 113, 0.2);
+        }
+
+        .diario-titulo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--verde-esperanza);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
+        }
+
+        .diario-subtitulo {
+            font-size: 1.1rem;
+            color: var(--texto-claro);
+            font-style: italic;
+        }
+
+        /* SECCION: FRASE MOTIVACIONAL */
+        .frase-motivacional {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(52, 152, 219, 0.1));
             border-radius: 1.5rem;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-left: 4px solid var(--color-rosa-intenso);
-            text-align: left;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            border-left: 5px solid var(--verde-esperanza);
+            text-align: center;
         }
 
-        .seccion-mal {
-            background: rgba(224, 170, 255, 0.25);
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-left: 4px solid #9d4edd;
-            text-align: left;
-        }
-
-        .titulo-seccion {
+        .frase-motivacional-texto {
             font-family: 'Dancing Script', cursive;
             font-size: 1.6rem;
-            color: var(--color-destacado);
-            margin-bottom: 0.8rem;
+            color: var(--verde-esperanza);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .frase-motivacional-autor {
+            font-size: 0.9rem;
+            color: var(--texto-claro);
+            font-style: italic;
+        }
+
+        .boton-nueva-frase {
+            background: linear-gradient(135deg, var(--verde-esperanza), var(--azul-calma));
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .boton-nueva-frase:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
+        }
+
+        /* SECCION: ESCRIBIR ENTRADA */
+        .seccion-escribir {
+            background: rgba(46, 204, 113, 0.05);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            border: 2px dashed rgba(46, 204, 113, 0.3);
+        }
+
+        .seccion-titulo {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--verde-esperanza);
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        /* Estilo para la parte interactiva mejorada */
-        .contenedor-indicador {
-            background: rgba(255, 255, 255, 0.6);
+        .campo-fecha {
+            background: white;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            border-radius: 0.8rem;
+            padding: 0.7rem 1rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--texto);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .selector-tema {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tema-opcion {
+            padding: 0.7rem 1rem;
+            border: 2px solid rgba(46, 204, 113, 0.2);
+            border-radius: 0.8rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+            color: var(--texto);
+        }
+
+        .tema-opcion:hover {
+            background: rgba(46, 204, 113, 0.1);
+            border-color: var(--verde-esperanza);
+        }
+
+        .tema-opcion.activo {
+            background: linear-gradient(135deg, var(--verde-esperanza), var(--azul-calma));
+            color: white;
+            border-color: var(--verde-esperanza);
+        }
+
+        .campo-texto {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.5rem;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+            border-radius: 1rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--texto);
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .campo-texto:focus {
+            outline: none;
+            border-color: var(--verde-esperanza);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+            background: white;
+        }
+
+        .contador-caracteres {
+            font-size: 0.85rem;
+            color: var(--texto-claro);
+            margin-bottom: 1rem;
+            text-align: right;
+        }
+
+        .boton-guardar {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--verde-esperanza), var(--azul-calma));
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.2);
+        }
+
+        .boton-guardar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(46, 204, 113, 0.3);
+        }
+
+        .boton-guardar:active {
+            transform: translateY(0);
+        }
+
+        /* SECCION: MIS ENTRADAS */
+        .seccion-entradas {
+            margin-top: 3rem;
+        }
+
+        .titulo-entradas {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--texto);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lista-entradas {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .entrada-item {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            border-left: 4px solid var(--verde-esperanza);
+            box-shadow: 0 4px 15px rgba(181, 101, 118, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: aparecer 0.5s ease-out;
+        }
+
+        .entrada-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.2);
+            border-left-color: var(--azul-calma);
+        }
+
+        .entrada-fecha {
+            font-weight: 600;
+            color: var(--verde-esperanza);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .entrada-tema {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--verde-esperanza);
+            border-radius: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .entrada-preview {
+            color: var(--texto);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .entrada-caracteres {
+            font-size: 0.8rem;
+            color: var(--texto-claro);
+        }
+
+        /* MODAL DE LECTURA */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.activo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-contenido {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.4s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(46, 204, 113, 0.2);
+            padding-bottom: 1rem;
+        }
+
+        .modal-fecha {
+            font-weight: 600;
+            color: var(--verde-esperanza);
+            font-size: 1.1rem;
+        }
+
+        .modal-tema {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--verde-esperanza);
+            border-radius: 0.8rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .modal-cerrar {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--texto-claro);
+            transition: all 0.2s ease;
+        }
+
+        .modal-cerrar:hover {
+            color: var(--rosa-intenso);
+            transform: rotate(90deg);
+        }
+
+        .modal-texto {
+            color: var(--texto);
+            line-height: 1.8;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .modal-acciones {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(46, 204, 113, 0.2);
+        }
+
+        .boton-modal {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .boton-editar {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--verde-esperanza);
+            border: 1px solid var(--verde-esperanza);
+        }
+
+        .boton-editar:hover {
+            background: var(--verde-esperanza);
+            color: white;
+        }
+
+        .boton-eliminar {
+            background: rgba(255, 77, 109, 0.1);
+            color: var(--rosa-intenso);
+            border: 1px solid var(--rosa-intenso);
+        }
+
+        .boton-eliminar:hover {
+            background: var(--rosa-intenso);
+            color: white;
+        }
+
+        /* ESTADISTICAS */
+        .estadisticas {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(52, 152, 219, 0.1));
             border-radius: 1.5rem;
             padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: inset 0 0 10px rgba(181, 101, 118, 0.1);
-            transition: all 0.5s ease;
-            overflow: hidden;
+            margin-bottom: 2.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
         }
 
-        .corazon-indicador {
-            font-size: 3rem; /* Tamaño inicial */
-            color: #ddd;
-            transition: all 0.4s ease;
-            margin-bottom: 1.5rem;
-            filter: drop-shadow(0 0 5px rgba(255, 77, 109, 0.2));
-            transform-origin: center;
+        .estadistica-item {
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(181, 101, 118, 0.1);
         }
 
-        .corazon-indicador.lleno {
-            color: var(--color-rosa-intenso);
-            filter: drop-shadow(0 0 15px rgba(255, 77, 109, 0.8)) drop-shadow(0 0 30px rgba(224, 170, 255, 0.6));
+        .estadistica-numero {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--verde-esperanza);
+            margin-bottom: 0.5rem;
         }
 
-        .control {
-            width: 85%;
-            height: 12px;
-            border-radius: 10px;
-            background: linear-gradient(to right, #ffd6e0, #e0aaff);
-            outline: none;
-            -webkit-appearance: none;
-            margin: 1rem 0;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-        }
-
-        .control::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: var(--color-rosa-intenso);
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 77, 109, 0.7);
-            border: 2px solid white;
-        }
-
-        .mensaje-indicador {
-            margin-top: 1rem;
+        .estadistica-label {
+            font-size: 0.95rem;
+            color: var(--texto-claro);
             font-weight: 600;
-            font-size: 1.1rem;
-            color: var(--color-destacado);
-            font-style: italic;
-            transition: all 0.3s ease;
-            min-height: 40px;
         }
 
-        .extra-item {
-            margin-top: 1rem;
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #9d4edd;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
+        /* ANIMACIONES */
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes aparecerDesdeIzquierda {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes flotarSuave {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes latidoElegante {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.15); }
+            50% { transform: scale(1); }
+        }
+
+        @keyframes latidoFuerte {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 77, 109, 0.6)); }
+            50% { transform: scale(1.2); filter: drop-shadow(0 0 30px rgba(255, 77, 109, 0.9)) drop-shadow(0 0 50px rgba(224, 170, 255, 0.6)); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .contenedor-principal {
+                padding: 2rem 1rem;
+            }
+
+            .tarjeta, .diario-container {
+                padding: 2rem;
+                border-radius: 1.8rem;
+            }
+
+            .titulo-principal {
+                font-size: 2rem;
+            }
+
+            .frase-especial {
+                font-size: 1.5rem;
+            }
+
+            .nav-botones {
+                gap: 1rem;
+            }
+
+            .boton-nav {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.95rem;
+            }
+
+            .diario-titulo {
+                font-size: 2.2rem;
+            }
+
+            .estadisticas {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal-contenido {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .mensaje-exito {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--verde-esperanza), var(--azul-calma));
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.3);
+            animation: slideUp 0.4s ease;
+            z-index: 1000;
+        }
+
+        .mensaje-exito.oculto {
+            display: none;
+        }
+
+        /* ============================================ */
+        /* EFECTO 3D AL INTERACTUAR (TILT) */
+        /* ============================================ */
+        .tilt-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease-out;
+            will-change: transform;
+        }
+
+        .tilt-3d-inner {
+            transform: translateZ(0);
+            transition: transform 0.15s ease-out;
+        }
+
+        /* ============================================ */
+        /* NAV: tercer botón */
+        /* ============================================ */
+        .boton-calendario {
+            background: linear-gradient(135deg, var(--noche), var(--lila-oscuro));
+            color: white;
+        }
+
+        .boton-calendario:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(43, 35, 80, 0.4);
+        }
+
+        /* ============================================ */
+        /* VISTA CALENDARIO ESPECIAL */
+        /* ============================================ */
+        #vista-calendario {
+            display: none;
+        }
+
+        .calendario-container {
+            background: linear-gradient(160deg, var(--noche) 0%, var(--noche-profunda) 100%);
+            border-radius: 2.5rem;
+            padding: 3rem;
+            box-shadow: 0 25px 60px rgba(26, 21, 56, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+            color: #f1ecff;
+            animation: aparecer 0.8s ease-out;
+            perspective: 1200px;
+        }
+
+        .calendario-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.6) 0%, transparent 50%),
+                               radial-gradient(2px 2px at 70% 65%, rgba(255,255,255,0.5) 0%, transparent 50%),
+                               radial-gradient(1.5px 1.5px at 40% 80%, rgba(255,255,255,0.4) 0%, transparent 50%),
+                               radial-gradient(1.5px 1.5px at 85% 15%, rgba(255,255,255,0.5) 0%, transparent 50%),
+                               radial-gradient(1.5px 1.5px at 55% 45%, rgba(255,255,255,0.35) 0%, transparent 50%);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .calendario-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .calendario-titulo {
             font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: var(--dorado-brillo);
+            text-shadow: 0 4px 20px rgba(244, 196, 48, 0.4);
+            margin-bottom: 0.5rem;
         }
 
-        .mostrar {
-            opacity: 1;
-            transform: translateY(0);
+        .calendario-subtitulo {
+            font-size: 1.05rem;
+            color: rgba(241, 236, 255, 0.7);
+            font-style: italic;
+        }
+
+        .calendario-tarjeta-fecha {
+            max-width: 380px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(244, 196, 48, 0.25);
+            border-radius: 2rem;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(6px);
+            transform-style: preserve-3d;
+        }
+
+        .calendario-mes {
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--oro);
+            margin-bottom: 0.3rem;
+        }
+
+        .calendario-numero {
+            font-size: 6rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1;
+            color: white;
+            text-shadow: 0 0 30px rgba(244, 196, 48, 0.5);
+        }
+
+        .calendario-numero.desbloqueado {
+            color: var(--dorado-brillo);
+            animation: latidoFuerte 1.4s ease-in-out infinite;
+        }
+
+        .calendario-candado {
+            font-size: 2.2rem;
+            margin-top: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .calendario-estado {
+            margin-top: 1.2rem;
+            font-size: 0.95rem;
+            color: rgba(241, 236, 255, 0.65);
+            line-height: 1.6;
+        }
+
+        .calendario-cuenta-regresiva {
+            margin-top: 1rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dorado-brillo);
+        }
+
+        .mensaje-felicitacion {
+            max-width: 600px;
+            margin: 2.5rem auto 0;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            display: none;
+        }
+
+        .mensaje-felicitacion.visible {
+            display: block;
+            animation: slideUp 0.6s ease;
+        }
+
+        .mensaje-felicitacion-texto {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.1rem;
+            color: var(--dorado-brillo);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(244, 196, 48, 0.35);
+        }
+
+        .mensaje-felicitacion-detalle {
+            font-size: 1.05rem;
+            color: rgba(241, 236, 255, 0.85);
+            line-height: 1.8;
+        }
+
+        .calendario-mini-grid {
+            max-width: 320px;
+            margin: 2rem auto 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .calendario-mini-titulo {
+            text-align: center;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(241, 236, 255, 0.5);
+            margin-bottom: 0.8rem;
+        }
+
+        .calendario-mini-dias {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.4rem;
+        }
+
+        .mini-dia {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(241, 236, 255, 0.5);
+        }
+
+        .mini-dia.es-11 {
+            background: linear-gradient(135deg, var(--oro), var(--dorado-brillo));
+            color: var(--noche-profunda);
+            font-weight: 700;
+            box-shadow: 0 0 18px rgba(244, 196, 48, 0.6);
+        }
+
+        .mini-dia.vacio {
+            background: transparent;
+        }
+
+        .calendario-vista-previa {
+            display: block;
+            margin: 2.2rem auto 0;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(241, 236, 255, 0.85);
+            padding: 0.6rem 1.4rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .calendario-vista-previa:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .calendario-aviso-previa {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--oro);
+            margin-top: 0.6rem;
+            opacity: 0.85;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ============================================ */
+        /* ESPACIO LIBRE PARA ESCRIBIR (NOTA PERSONAL) */
+        /* ============================================ */
+        .nota-libre-container {
+            background: linear-gradient(135deg, rgba(224, 170, 255, 0.12), rgba(255, 214, 224, 0.18));
+            border-radius: 1.8rem;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            border: 2px dashed rgba(157, 78, 221, 0.35);
+            position: relative;
+        }
+
+        .nota-libre-titulo {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--lila-oscuro);
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nota-libre-descripcion {
+            font-size: 0.92rem;
+            color: var(--texto-claro);
+            margin-bottom: 1.2rem;
+            font-style: italic;
+        }
+
+        .nota-libre-texto {
+            width: 100%;
+            min-height: 140px;
+            padding: 1.3rem;
+            border: 1px solid rgba(157, 78, 221, 0.25);
+            border-radius: 1rem;
+            font-family: 'Crimson Text', serif;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            resize: vertical;
+            background: rgba(255, 255, 255, 0.85);
+            color: var(--texto);
+            transition: all 0.3s ease;
+        }
+
+        .nota-libre-texto:focus {
+            outline: none;
+            border-color: var(--lila-oscuro);
+            box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.12);
+            background: white;
+        }
+
+        .nota-libre-pie {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.9rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nota-libre-estado {
+            font-size: 0.85rem;
+            color: var(--texto-claro);
+            font-style: italic;
+        }
+
+        .nota-libre-guardar {
+            background: linear-gradient(135deg, var(--lila-oscuro), var(--rosa-intenso));
+            color: white;
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nota-libre-guardar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(157, 78, 221, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .calendario-container {
+                padding: 2rem 1.5rem;
+            }
+            .calendario-numero {
+                font-size: 4.5rem;
+            }
+            .calendario-titulo {
+                font-size: 2.1rem;
+            }
         }
     </style>
 </head>
-<body class="flex items-center justify-center px-4 py-16">
+<body>
+    <!-- Canvas 3D -->
+    <canvas id="canvas3d"></canvas>
 
-    <!-- Corazones flotantes de fondo -->
-    <div id="corazonesFondo"></div>
+    <div class="contenedor-principal">
+        <!-- ========== VISTA PRINCIPAL ========== -->
+        <div id="vista-principal">
+            <div class="nav-botones">
+                <button class="boton-nav boton-principal" onclick="scrollTo('#diario-section')">Leer la despedida</button>
+                <button class="boton-nav boton-diario" onclick="irAlDiario()"> Mi Diario de Esperanza</button>
+                <button class="boton-nav boton-calendario" onclick="irAlCalendario()">Fecha Especial</button>
+            </div>
 
-    <!-- Corazones giratorios decorativos -->
-    <div class="corazon-giratorio" style="top: 10%; left: 10%; font-size: 2rem;"></div>
-    <div class="corazon-giratorio" style="top: 20%; right: 15%; font-size: 1.8rem; animation-duration: 7s;"></div>
-    <div class="corazon-giratorio" style="bottom: 15%; left: 15%; font-size: 2.2rem; animation-duration: 9s;"></div>
-    <div class="corazon-giratorio" style="bottom: 10%; right: 10%; font-size: 1.7rem; animation-duration: 8s;"></div>
+            <div class="header">
+                <div class="icono-corazon-flotante">❤️</div>
+                <h1 class="titulo-principal">Para ti, siempre</h1>
+            </div>
 
-    <div class="carta p-8 md:p-12 text-center relative">
-        <h1 class="titulo-cursiva text-[clamp(2.5rem,6vw,4rem)] text-[var(--color-destacado)] mb-4 brillo">
-            Para ti, siempre
-        </h1>
-        
-        <div class="corazon-grande mb-8">
-            <i class="fa fa-heart"></i>
+            <div class="tarjeta" id="diario-section">
+                <div class="contenido-texto">
+                    <p class="parrafo">Quería dejarte algo que siempre pudieras encontrar, algo que esté aquí igual que yo: <span class="texto-destacado">sin prisas, sin exigencias, solo con amor y con este adiós que cuido tanto.</span></p>
+
+                    <p class="parrafo">Sé que llevas dentro cosas que a veces pesan mucho, y entiendo perfectamente que te alejaste para no lastimarme. Por eso te digo adiós con el corazón tranquilo, porque sé que lo haces cuidando de ti, y eso es lo que más me importa. <strong>Tu bienestar es lo más valioso, y por eso este adiós es con respeto y cariño infinito.</strong></p>
+
+                    <!-- VIDEO -->
+                    <div class="contenedor-video">
+                        <video controls poster="">
+                            <source src="copy_3BAF7A19-421F-4B1D-B9C9-7D0DCA950CAB.mp4" type="video/mp4">
+                            Tu navegador no soporta el video.
+                        </video>
+                    </div>
+
+                    <!-- GALERÍA DE FOTOS -->
+                    <div class="contenedor-fotos">
+                        <h3 class="titulo-galeria">Nuestros recuerdos</h3>
+                        <div class="galeria-fotos">
+                            <div class="foto-item tilt-3d">
+                                <img src="1B995113-0808-4FD2-A122-1094D4472871.JPG" alt="Recuerdo bonito">
+                            </div>
+                            <div class="foto-item tilt-3d">
+                                <img src="IMG_1163.jpg" alt="Nosotros">
+                            </div>
+                            <div class="foto-item tilt-3d">
+                                <img src="IMG_1164.jpg" alt="Momentos juntos">
+                            </div>
+                            <div class="foto-item tilt-3d">
+                                <img src="IMG_1165.jpg" alt="Sonrisas">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECCIÓN BONITA -->
+                    <div class="seccion seccion-bonita">
+                        <h3 class="titulo-seccion">
+                            <span>💖</span>
+                            Lo bonito que fuimos
+                        </h3>
+                        <p>Quiero que nunca olvides todo lo hermoso que vivimos fuimos risas que salían solas y momentos que se quedaron guardados en el alma. Cada vez que compartimos tiempo, cada palabra, cada abrazo y cada mirada fueron reales, sinceros y llenos de amor.</p>
+                        <p style="margin-top: 1rem;">Lo que construimos juntos fue único y especial. No importa el tiempo que pase ni que hoy nos digamos adiós; lo bonito que fuimos nadie lo puede borrar, porque quedó grabado en mi corazón y sé que también en el tuyo. Fuimos dos personas que se quisieron bonito, y eso es algo que dura para siempre.</p>
+                    </div>
+
+                    <!-- SECCIÓN REFLEXIÓN -->
+                    <div class="seccion seccion-reflexion">
+                        <h3 class="titulo-seccion">
+                            <span>🌙</span>
+                            Cuando te sientas mal
+                        </h3>
+                        <p>Si algún día sientes que todo pesa demasiado, que tus emociones te ganan o que el mundo se siente oscuro, ven y lee esto. Quiero que sepas que no estás sola, aunque nuestros caminos se separen. Entiendo tus días difíciles, entiendo que necesites tu espacio, y te valoro igual o más que el primer día.</p>
+                        <p style="margin-top: 1rem;">No te culpes por sentir, ni por necesitar tiempo. Eres humana y maravillosa tal como eres. Recuerda que aunque no esté físicamente, te llevo siempre en mi pensamiento. Respira profundo, date paciencia y recuerda: <strong>fuiste, eres y serás siempre alguien muy especial para mí, y te deseo lo mejor, hoy y siempre.</strong></p>
+                    </div>
+
+                    <!-- SLIDER INTERACTIVO -->
+                    <div class="contenedor-slider">
+                        <h3 class="titulo-slider"> Muévelo y lee mi despedida</h3>
+                        
+                        <div class="corazon-indicador" id="corazonSlider">❤️</div>
+
+                        <input type="range" min="0" max="100" value="0" class="slider-control" id="sliderDespedida">
+
+                        <div class="mensaje-slider" id="mensajeDespedida">
+                            Empieza a moverlo despacio...
+                        </div>
+
+                        <div class="extra-mensaje" id="extraMensaje"></div>
+                    </div>
+
+                    <!-- FRASE ESPECIAL -->
+                    <div class="frase-especial">
+                        Aquí estaré siempre en el recuerdo
+                        te deseo paz, te deseo luz y te deseo vida
+                        tan bonita como tú te mereces.
+                    </div>
+
+                    <p style="margin-top: 2rem; margin-bottom: 2rem;">Esta página está llena de corazones, igual que mi recuerdo está siempre lleno de ti. Entra cuando quieras, cuando necesites un abrazo, cuando te sientas triste o simplemente cuando quieras recordar que <span class="texto-destacado">alguien te quiso de verdad, y te dice adiós con todo su corazón.</span></p>
+
+                    <!-- FIRMA -->
+                    <div class="firma">
+                        — Bueno, te hice un rediseño de la página y le agregué más cosas. Espero que, si estás leyendo esto, sea porque entraste otra vez; espero que te guste y espero que la página no llegue a fallar.
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="text-[var(--color-texto)] text-lg md:text-xl leading-relaxed space-y-6">
-            <p>Quería dejarte algo que siempre pudieras encontrar, algo que esté aquí igual que yo: <span class="texto-destacado">sin prisas, sin exigencias, solo con amor y con este adiós que cuido tanto.</span></p>
-
-            <p>Sé que llevas dentro cosas que a veces pesan mucho, y entiendo perfectamente que te alejaste para no lastimarme. Por eso te digo adiós con el corazón tranquilo, porque sé que lo haces cuidando de ti, y eso es lo que más me importa. <strong>Tu bienestar es lo más valioso, y por eso este adiós es con respeto y cariño infinito.</strong></p>
-
-
-            <!-- ✅ ESPACIO PARA TU VIDEO MP4 -->
-            <div class="contenedor-video">
-                <video controls poster="">
-                    <!-- 👇 AQUÍ PONES EL NOMBRE DE TU ARCHIVO 👇 -->
-                    <source src="copy_3BAF7A19-421F-4B1D-B9C9-7D0DCA950CAB.mp4" type="video/mp4">
-                    Tu navegador no soporta el video, pero sé que lo verás desde el corazón.
-                </video>
-            </div>
-            <!-- FIN DEL ESPACIO PARA TU VIDEO -->
-
-
-            <!-- ✨ ESPACIO PARA TUS FOTOS -->
-            <div class="contenedor-fotos">
-                <h3 class="titulo-seccion justify-center">📸 Nuestros recuerdos</h3>
-                <div class="grilla-fotos">
-                    <!-- 👇 AQUÍ AGREGAS TUS FOTOS, DUPLICA ESTE BLOQUE POR CADA FOTO 👇 -->
-                    <div class="foto-item">
-                        <img src="1B995113-0808-4FD2-A122-1094D4472871.JPG" alt="Recuerdo bonito">
-                    </div>
-                    <div class="foto-item">
-                        <img src="IMG_1163.jpg" alt="Nosotros">
-                    </div>
-                    <div class="foto-item">
-                        <img src="IMG_1164.jpg" alt="Momentos juntos">
-                    </div>
-                    <div class="foto-item">
-                        <img src="IMG_1165.jpg" alt="Sonrisas">
-                    </div>
-                    <!-- 👆 AGREGA MÁS FOTOS COPIANDO ESE BLOQUE 👆 -->
-                </div>
-            </div>
-            <!-- FIN DE LA SECCIÓN DE FOTOS -->
-
-
-            <!-- ✨ SECCIÓN: LO BONITO QUE FUIMOS -->
-            <div class="seccion-bonito">
-                <h3 class="titulo-seccion">💖 Lo bonito que fuimos</h3>
-                <p>Quiero que nunca olvides todo lo hermoso que vivimos fuimos risas que salían solas y momentos que se quedaron guardados en el alma. Cada vez que compartimos tiempo, cada palabra, cada abrazo y cada mirada fueron reales, sinceros y llenos de amor.</p>
-                <p style="margin-top: 0.5rem;">Lo que construimos juntos fue único y especial. No importa el tiempo que pase ni que hoy nos digamos adiós; lo bonito que fuimos nadie lo puede borrar, porque quedó grabado en mi corazón y sé que también en el tuyo. Fuimos dos personas que se quisieron bonito, y eso es algo que dura para siempre.</p>
+        <!-- ========== VISTA DEL DIARIO ========== -->
+        <div id="vista-diario">
+            <div style="margin-bottom: 2rem;">
+                <button class="boton-nav boton-volver" onclick="volverAlPrincipal()">← Volver</button>
             </div>
 
-
-            <!-- ✨ SECCIÓN: CUANDO TE SIENTAS MAL -->
-            <div class="seccion-mal">
-                <h3 class="titulo-seccion"> Cuando te sientas mal</h3>
-                <p>Si algún día sientes que todo pesa demasiado, que tus emociones te ganan o que el mundo se siente oscuro, ven y lee esto. Quiero que sepas que no estás sola, aunque nuestros caminos se separen. Entiendo tus días difíciles, entiendo que necesites tu espacio, y te valoro igual o más que el primer día.</p>
-                <p style="margin-top: 0.5rem;">No te culpes por sentir, ni por necesitar tiempo. Eres humana y maravillosa tal como eres. Recuerda que aunque no esté físicamente, te llevo siempre en mi pensamiento. Respira profundo, date paciencia y recuerda: <strong>fuiste, eres y serás siempre alguien muy especial para mí, y te deseo lo mejor, hoy y siempre.</strong></p>
-            </div>
-
-
-            <!-- ✨ INDICADOR INTERACTIVO: AHORA ES DE DESPEDIDA Y RECUERDOS -->
-            <div class="contenedor-indicador">
-                <h3 class="titulo-seccion justify-center">✨ Muévelo y lee todo lo que te dejo</h3>
-                
-                <div id="corazonIndicador" class="corazon-indicador">
-                    <i class="fa fa-heart"></i>
+            <div class="diario-container">
+                <div class="diario-header">
+                    <h1 class="diario-titulo">📓 Mi Diario de Esperanza</h1>
+                    <p class="diario-subtitulo">Un espacio para ti: sueños, metas, esperanza y crecimiento</p>
                 </div>
 
-                <input type="range" min="0" max="100" value="0" class="control" id="controlAmor">
-
-                <div id="mensajeIndicador" class="mensaje-indicador">
-                    Empieza a moverlo despacio... aquí te dejo mi despedida
+                <!-- ESTADISTICAS -->
+                <div class="estadisticas">
+                    <div class="estadistica-item">
+                        <div class="estadistica-numero" id="stat-entradas">0</div>
+                        <div class="estadistica-label">Entradas</div>
+                    </div>
+                    <div class="estadistica-item">
+                        <div class="estadistica-numero" id="stat-caracteres">0</div>
+                        <div class="estadistica-label">Palabras escritas</div>
+                    </div>
+                    <div class="estadistica-item">
+                        <div class="estadistica-numero" id="stat-dias">0</div>
+                        <div class="estadistica-label">Días activo</div>
+                    </div>
                 </div>
 
-                <!-- Aquí aparecen los mensajes de despedida -->
-                <div id="cosaExtra" class="extra-item"></div>
+                <!-- FRASE MOTIVACIONAL -->
+                <div class="frase-motivacional">
+                    <div class="frase-motivacional-texto" id="fraseMotivacional">
+                        Cargando inspiración...
+                    </div>
+                    <div class="frase-motivacional-autor" id="autorFrase"></div>
+                    <button class="boton-nueva-frase" onclick="cargarNewFrase()"> Nueva frase</button>
+                </div>
+
+                <!-- ESPACIO LIBRE PARA ESCRIBIR -->
+                <div class="nota-libre-container">
+                    <h2 class="nota-libre-titulo">💌 Tu espacio libre</h2>
+                    <p class="nota-libre-descripcion">Sin fecha, sin tema, sin reglas. Escribe aquí lo que quieras decirte a ti misma en este momento.</p>
+                    <textarea id="notaLibreTexto" class="nota-libre-texto" placeholder="Lo que pienses, lo que sientas, lo que necesites soltar..."></textarea>
+                    <div class="nota-libre-pie">
+                        <span class="nota-libre-estado" id="notaLibreEstado">Aún no has escrito nada aquí.</span>
+                        <button class="nota-libre-guardar" onclick="guardarNotaLibre()"> Guardar nota</button>
+                    </div>
+                </div>
+
+                <!-- SECCION ESCRIBIR -->
+                <div class="seccion-escribir">
+                    <h2 class="seccion-titulo"> Escribe tu historia hoy</h2>
+
+                    <input type="date" id="entradaFecha" class="campo-fecha">
+
+                    <div>
+                        <label style="display: block; margin-bottom: 0.8rem; font-weight: 600; color: var(--texto);">¿Sobre qué quieres escribir?</label>
+                        <div class="selector-tema">
+                            <button class="tema-opcion activo" onclick="seleccionarTema(this, 'Sueño')"> Sueño</button>
+                            <button class="tema-opcion" onclick="seleccionarTema(this, 'Meta')"> Meta</button>
+                            <button class="tema-opcion" onclick="seleccionarTema(this, 'Reflexión')"> Reflexión</button>
+                            <button class="tema-opcion" onclick="seleccionarTema(this, 'Gratitud')"> Gratitud</button>
+                            <button class="tema-opcion" onclick="seleccionarTema(this, 'Salud')"> Salud</button>
+                            <button class="tema-opcion" onclick="seleccionarTema(this, 'Sanación')"> Sanación</button>
+                        </div>
+                    </div>
+
+                    <textarea id="entradaTexto" class="campo-texto" placeholder="Escribe sin límites. Este es tu espacio seguro..."></textarea>
+
+                    <div class="contador-caracteres">
+                        <span id="contadorChars">0</span> caracteres
+                    </div>
+
+                    <button class="boton-guardar" onclick="guardarEntrada()"> Guardar entrada</button>
+                </div>
+
+                <!-- MIS ENTRADAS -->
+                <div class="seccion-entradas">
+                    <h2 class="titulo-entradas"> Mis entradas</h2>
+                    <div class="lista-entradas" id="listaEntradas">
+                        <p style="color: var(--texto-claro); text-align: center; padding: 2rem;">No tienes entradas aún. ¡Empieza a escribir tu historia hoy!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== VISTA CALENDARIO ESPECIAL ========== -->
+        <div id="vista-calendario">
+            <div style="margin-bottom: 2rem;">
+                <button class="boton-nav boton-volver" onclick="volverAlPrincipal()">← Volver</button>
             </div>
 
+            <div class="calendario-container" id="calendarioContainer">
+                <div class="calendario-header">
+                    <h1 class="calendario-titulo">Una fecha solo para ti</h1>
+                    <p class="calendario-subtitulo">Este espacio despierta una sola vez al año</p>
+                </div>
 
-            <p>Te agradezco por todo lo que compartimos, por lo que me enseñaste y por haber sido parte de mi vida. No te pido nada, solo quiero que recuerdes esto siempre:</p>
+                <div class="calendario-tarjeta-fecha tilt-3d" id="tarjetaFecha">
+                    <div class="calendario-mes">Enero</div>
+                    <div class="calendario-numero" id="calendarioNumero">11</div>
+                    <div class="calendario-candado" id="calendarioCandado">🔒</div>
+                    <div class="calendario-estado" id="calendarioEstado">Hoy no es 11 de enero todavía.</div>
+                    <div class="calendario-cuenta-regresiva" id="calendarioCuenta"></div>
+                </div>
 
-            <p class="titulo-cursiva frase-especial my-8">
-                Aquí estaré siempre en el recuerdo<br>te deseo paz, te deseo luz y te deseo vida<br>tan bonita como tú te mereces.
-            </p>
+                <div class="calendario-mini-grid">
+                    <div class="calendario-mini-titulo">Enero · cada año</div>
+                    <div class="calendario-mini-dias" id="calendarioMiniDias"></div>
+                </div>
 
-            <p>Esta página está llena de corazones, igual que mi recuerdo está siempre lleno de ti. Entra cuando quieras, cuando necesites un abrazo, cuando te sientas triste o simplemente cuando quieras recordar que <span class="texto-destacado">alguien te quiso de verdad, y te dice adiós con todo su corazón.</span></p>
+                <div class="mensaje-felicitacion" id="mensajeFelicitacion">
+                    <div class="mensaje-felicitacion-texto" id="textoFelicitacion"></div>
+                    <div class="mensaje-felicitacion-detalle" id="detalleFelicitacion"></div>
+                </div>
 
-            <p class="text-base mt-10 italic text-[var(--color-destacado)] opacity-90">— Alguien que nunca dejará de ver lo increíble, valiosa y hermosa que eres</p>
+                <button class="calendario-vista-previa" onclick="alternarVistaPrevia()" id="botonVistaPrevia"> Ver cómo se vería (vista previa)</button>
+                <div class="calendario-aviso-previa" id="avisoPrevia" style="display:none;">Esto es solo una vista previa de diseño. El mensaje real solo se activa el 11 de enero </div>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Crear MUCHOS corazones flotantes de fondo
-        const contenedorCorazones = document.getElementById('corazonesFondo');
-        const cantidadCorazones = 25;
+    <!-- MODAL PARA LEER ENTRADA -->
+    <div class="modal-overlay" id="modalEntrada">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-fecha" id="modalFecha"></div>
+                    <div class="modal-tema" id="modalTema"></div>
+                </div>
+                <button class="modal-cerrar" onclick="cerrarModal()">✕</button>
+            </div>
+            <div class="modal-texto" id="modalTexto"></div>
+            <div class="modal-acciones">
+                <button class="boton-modal boton-editar" onclick="editarEntrada()"> Editar</button>
+                <button class="boton-modal boton-eliminar" onclick="eliminarEntrada()"> Eliminar</button>
+            </div>
+        </div>
+    </div>
 
-        for(let i = 0; i < cantidadCorazones; i++) {
-            let corazon = document.createElement('div');
-            corazon.classList.add('corazon-flotante');
-            corazon.innerHTML = '❤️';
-            
-            corazon.style.left = `${Math.random() * 100}vw`;
-            corazon.style.animationDelay = `${Math.random() * 8}s`;
-            corazon.style.animationDuration = `${6 + Math.random() * 5}s`;
-            corazon.style.fontSize = `${0.8 + Math.random() * 1.5}rem`;
-            
-            contenedorCorazones.appendChild(corazon);
+    <!-- MENSAJE DE EXITO -->
+    <div class="mensaje-exito oculto" id="mensajeExito">✓ ¡Entrada guardada con éxito!</div>
+
+    <script>
+        // ========== ALMACENAMIENTO: compatibilidad fuera de Claude.ai ==========
+        // window.storage solo existe dentro del visor de Artifacts de Claude.ai.
+        // Si esta página se abre directamente en un navegador o se hospeda en
+        // tu propio sitio, window.storage no existe y todo intento de guardar
+        // falla. Este bloque crea un "relleno" (polyfill) con la MISMA forma
+        // de la API (get/set/delete/list) pero respaldado por localStorage,
+        // para que el diario funcione sin importar dónde se abra la página.
+        if (!window.storage) {
+            window.storage = (function () {
+                const CLAVE_RAIZ = '__diario_storage__';
+
+                function leerTodo() {
+                    try {
+                        return JSON.parse(localStorage.getItem(CLAVE_RAIZ) || '{}');
+                    } catch (e) {
+                        return {};
+                    }
+                }
+
+                function guardarTodo(datos) {
+                    localStorage.setItem(CLAVE_RAIZ, JSON.stringify(datos));
+                }
+
+                return {
+                    async get(key, shared = false) {
+                        const datos = leerTodo();
+                        if (!(key in datos)) {
+                            // Igual que la API real: si la clave no existe, lanza error.
+                            throw new Error('Clave no encontrada: ' + key);
+                        }
+                        return { key, value: datos[key], shared: !!shared };
+                    },
+                    async set(key, value, shared = false) {
+                        const datos = leerTodo();
+                        datos[key] = value;
+                        guardarTodo(datos);
+                        return { key, value, shared: !!shared };
+                    },
+                    async delete(key, shared = false) {
+                        const datos = leerTodo();
+                        delete datos[key];
+                        guardarTodo(datos);
+                        return { key, deleted: true, shared: !!shared };
+                    },
+                    async list(prefix = '', shared = false) {
+                        const datos = leerTodo();
+                        const keys = Object.keys(datos).filter(k => k.startsWith(prefix));
+                        return { keys, prefix, shared: !!shared };
+                    }
+                };
+            })();
+            console.info('[diario] window.storage no estaba disponible: usando localStorage como respaldo.');
         }
 
-        // Efecto al hacer clic: llueven corazones ✨
+        // ========== THREE.JS 3D ==========
+        let scene, camera, renderer;
+        let hearts = [];
+        let orbes = [];
+        let estrellas;
+        let scrollObjetivo = 0;
+        let scrollActual = 0;
+
+        function initThreeJS() {
+            const canvas = document.getElementById('canvas3d');
+            scene = new THREE.Scene();
+            
+            camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000
+            );
+            camera.position.z = 5;
+
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas, 
+                alpha: true, 
+                antialias: true 
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            createHearts();
+            createOrbes();
+            createEstrellas();
+            animate();
+            window.addEventListener('resize', onWindowResize);
+            document.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('scroll', onScrollParallax);
+        }
+
+        function createHearts() {
+            const heartCount = 8;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = createHeartGeometry();
+                const material = new THREE.MeshPhongMaterial({
+                    color: new THREE.Color().setHSL(0.95, 0.8, 0.6 + Math.random() * 0.2),
+                    emissive: 0xff4d6d,
+                    emissiveIntensity: 0.3,
+                    wireframe: false,
+                    shininess: 90
+                });
+
+                const mesh = new THREE.Mesh(heart, material);
+                
+                mesh.position.x = (Math.random() - 0.5) * 10;
+                mesh.position.y = (Math.random() - 0.5) * 10;
+                mesh.position.z = Math.random() * 3 - 2;
+                mesh.scale.set(0.3, 0.3, 0.3);
+                
+                mesh.rotation.x = Math.random() * Math.PI;
+                mesh.rotation.y = Math.random() * Math.PI;
+
+                mesh.userData = {
+                    vx: (Math.random() - 0.5) * 0.02,
+                    vy: (Math.random() - 0.5) * 0.02,
+                    vz: Math.random() * 0.01,
+                    rotVx: (Math.random() - 0.5) * 0.005,
+                    rotVy: (Math.random() - 0.5) * 0.005,
+                    rotVz: (Math.random() - 0.5) * 0.005
+                };
+
+                scene.add(mesh);
+                hearts.push(mesh);
+            }
+
+            const light = new THREE.PointLight(0xff4d6d, 1, 50);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const luzLila = new THREE.PointLight(0x9d4edd, 0.8, 50);
+            luzLila.position.set(-5, -3, 3);
+            scene.add(luzLila);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+        }
+
+        function createHeartGeometry() {
+            const shape = new THREE.Shape();
+            
+            const x = 0, y = 0;
+            shape.moveTo(x + 5, y + 5);
+            shape.bezierCurveTo(x + 5, y + 5, x + 4, y, x, y);
+            shape.bezierCurveTo(x - 6, y, x - 6, y + 7, x - 6, y + 7);
+            shape.bezierCurveTo(x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19);
+            shape.bezierCurveTo(x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7);
+            shape.bezierCurveTo(x + 16, y + 7, x + 16, y, x + 10, y);
+            shape.bezierCurveTo(x + 7, y, x + 5, y + 5, x + 5, y + 5);
+
+            const geometry = new THREE.ExtrudeGeometry(shape, {
+                depth: 2,
+                bevelEnabled: true,
+                bevelThickness: 0.3,
+                bevelSize: 0.2,
+                bevelSegments: 3
+            });
+
+            geometry.center();
+            return geometry;
+        }
+
+        // Orbes dorados/lila flotantes que dan profundidad extra a la escena
+        function createOrbes() {
+            const orbeCount = 14;
+            const colores = [0xf4c430, 0xe0aaff, 0xffd6e0];
+
+            for (let i = 0; i < orbeCount; i++) {
+                const radio = 0.06 + Math.random() * 0.12;
+                const geometry = new THREE.SphereGeometry(radio, 16, 16);
+                const color = colores[Math.floor(Math.random() * colores.length)];
+                const material = new THREE.MeshPhongMaterial({
+                    color: color,
+                    emissive: color,
+                    emissiveIntensity: 0.6,
+                    transparent: true,
+                    opacity: 0.75
+                });
+
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.x = (Math.random() - 0.5) * 14;
+                mesh.position.y = (Math.random() - 0.5) * 14;
+                mesh.position.z = Math.random() * 4 - 4;
+
+                mesh.userData = {
+                    vy: 0.004 + Math.random() * 0.006,
+                    vx: (Math.random() - 0.5) * 0.003,
+                    fase: Math.random() * Math.PI * 2
+                };
+
+                scene.add(mesh);
+                orbes.push(mesh);
+            }
+        }
+
+        // Campo de estrellas tenue de fondo para dar sensación de profundidad infinita
+        function createEstrellas() {
+            const cantidad = 250;
+            const posiciones = new Float32Array(cantidad * 3);
+
+            for (let i = 0; i < cantidad; i++) {
+                posiciones[i * 3] = (Math.random() - 0.5) * 40;
+                posiciones[i * 3 + 1] = (Math.random() - 0.5) * 40;
+                posiciones[i * 3 + 2] = -10 - Math.random() * 20;
+            }
+
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.BufferAttribute(posiciones, 3));
+
+            const material = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.06,
+                transparent: true,
+                opacity: 0.5
+            });
+
+            estrellas = new THREE.Points(geometry, material);
+            scene.add(estrellas);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            hearts.forEach(heart => {
+                heart.position.x += heart.userData.vx;
+                heart.position.y += heart.userData.vy;
+                heart.position.z += heart.userData.vz;
+
+                heart.rotation.x += heart.userData.rotVx;
+                heart.rotation.y += heart.userData.rotVy;
+                heart.rotation.z += heart.userData.rotVz;
+
+                if (Math.abs(heart.position.x) > 6) heart.userData.vx *= -1;
+                if (Math.abs(heart.position.y) > 6) heart.userData.vy *= -1;
+                if (Math.abs(heart.position.z) > 3) heart.userData.vz *= -1;
+            });
+
+            orbes.forEach(orbe => {
+                orbe.position.y += orbe.userData.vy;
+                orbe.position.x += Math.sin(Date.now() * 0.0005 + orbe.userData.fase) * 0.002;
+                orbe.userData.fase += 0.01;
+
+                if (orbe.position.y > 8) {
+                    orbe.position.y = -8;
+                }
+            });
+
+            if (estrellas) {
+                estrellas.rotation.y += 0.0002;
+            }
+
+            // Suaviza el paralaje del scroll para que la cámara se mueva con calma
+            scrollActual += (scrollObjetivo - scrollActual) * 0.05;
+            camera.position.y = -scrollActual * 0.0015;
+            camera.rotation.z = scrollActual * 0.00005;
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onMouseMove(event) {
+            const x = (event.clientX / window.innerWidth) * 2 - 1;
+            const y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            hearts.forEach(heart => {
+                heart.userData.vx += x * 0.0001;
+                heart.userData.vy += y * 0.0001;
+            });
+        }
+
+        function onScrollParallax() {
+            scrollObjetivo = window.scrollY;
+        }
+
+        // ========== SLIDER INTERACTIVO ==========
+        const slider = document.getElementById('sliderDespedida');
+        const corazonSlider = document.getElementById('corazonSlider');
+        const mensajeDespedida = document.getElementById('mensajeDespedida');
+        const extraMensaje = document.getElementById('extraMensaje');
+
+        const mensajesPorEtapa = [
+            { principal: "Empieza a moverlo despacio...", extra: "Aquí te dejo mi despedida" },
+            { principal: "Gracias por haber llegado a mi vida", extra: "Fuiste lo más bonito" },
+            { principal: "Cada recuerdo quedará intacto en mi corazón", extra: "Lo vivido nadie lo borra" },
+            { principal: "Me voy tranquilo sabiendo que lo hicimos bien", extra: "Fuimos tan bonitos" },
+            { principal: "Te deseo todo lo bueno que te mereces", extra: "Que seas muy feliz" },
+            { principal: "Aunque caminemos por rumbos distintos", extra: "Te llevo siempre conmigo" },
+            { principal: "Adiós no es olvido, es recuerdo eterno", extra: "Gracias por cada momento" },
+            { principal: "Este corazón creció contigo", extra: "Te llevarás lo mejor de mí" },
+            { principal: "Te dejo en paz, con todo mi cariño", extra: "Lo bonito queda para siempre" },
+            { principal: "Gracias por todo, y adiós con el corazón", extra: "Sé feliz, te lo mereces" }
+        ];
+
+        slider.addEventListener('input', (e) => {
+            const valor = parseInt(e.target.value);
+            const etapa = Math.floor(valor / 10);
+
+            const tamano = 4 + (valor / 100) * 8;
+            corazonSlider.style.fontSize = tamano + 'rem';
+
+            if (valor > 0) {
+                corazonSlider.classList.add('activo');
+            } else {
+                corazonSlider.classList.remove('activo');
+            }
+
+            if (etapa < mensajesPorEtapa.length) {
+                mensajeDespedida.textContent = mensajesPorEtapa[etapa].principal;
+                
+                extraMensaje.classList.remove('visible');
+                setTimeout(() => {
+                    extraMensaje.textContent = mensajesPorEtapa[etapa].extra;
+                    extraMensaje.classList.add('visible');
+                }, 100);
+            }
+
+            if (valor >= 90) {
+                mensajeDespedida.style.fontSize = '1.4rem';
+                extraMensaje.style.fontSize = '1.8rem';
+            } else {
+                mensajeDespedida.style.fontSize = '1.2rem';
+                extraMensaje.style.fontSize = '1.6rem';
+            }
+        });
+
+        // ========== LLUVIA DE CORAZONES ==========
         document.addEventListener('click', (e) => {
-            for(let i = 0; i < 8; i++) {
-                let corazonClick = document.createElement('div');
-                corazonClick.innerHTML = '💖';
-                corazonClick.style.position = 'absolute';
-                corazonClick.style.left = `${e.pageX + (Math.random() * 40 - 20)}px`;
-                corazonClick.style.top = `${e.pageY + (Math.random() * 40 - 20)}px`;
-                corazonClick.style.fontSize = `${1 + Math.random() * 1.2}rem`;
-                corazonClick.style.pointerEvents = 'none';
-                corazonClick.style.transition = 'all 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67)';
-                corazonClick.style.opacity = '1';
-                document.body.appendChild(corazonClick);
+            for (let i = 0; i < 6; i++) {
+                const corazon = document.createElement('div');
+                corazon.textContent = '💖';
+                corazon.style.position = 'absolute';
+                corazon.style.left = (e.pageX + (Math.random() * 40 - 20)) + 'px';
+                corazon.style.top = (e.pageY + (Math.random() * 40 - 20)) + 'px';
+                corazon.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+                corazon.style.pointerEvents = 'none';
+                corazon.style.zIndex = '1000';
+                corazon.style.opacity = '1';
+                document.body.appendChild(corazon);
 
                 setTimeout(() => {
                     const angulo = Math.random() * Math.PI * 2;
-                    const distancia = 100 + Math.random() * 150;
-                    corazonClick.style.transform = `translate(${Math.cos(angulo) * distancia}px, ${-Math.sin(angulo) * distancia}px) rotate(${Math.random() * 360}deg)`;
-                    corazonClick.style.opacity = '0';
+                    const distancia = 80 + Math.random() * 120;
+                    corazon.style.transition = 'all 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67)';
+                    corazon.style.transform = `translate(${Math.cos(angulo) * distancia}px, ${-Math.sin(angulo) * distancia}px) rotate(${Math.random() * 360}deg)`;
+                    corazon.style.opacity = '0';
                 }, 10);
 
-                setTimeout(() => corazonClick.remove(), 1500);
+                setTimeout(() => corazon.remove(), 1500);
             }
         });
 
-        // Efecto especial: latido suave del fondo cada 3 segundos
-        setInterval(() => {
-            document.body.style.background = 'linear-gradient(135deg, #fff5f8, #f3e0ff, #ffd6e0)';
-            setTimeout(() => {
-                document.body.style.background = 'linear-gradient(135deg, var(--color-fondo), var(--color-lila), var(--color-rosa-suave))';
-            }, 500);
-        }, 3000);
+        // ========== NAVEGACIÓN ENTRE VISTAS ==========
+        function ocultarTodasLasVistas() {
+            document.getElementById('vista-principal').style.display = 'none';
+            document.getElementById('vista-diario').style.display = 'none';
+            document.getElementById('vista-calendario').style.display = 'none';
+        }
 
+        function irAlDiario() {
+            ocultarTodasLasVistas();
+            document.getElementById('vista-diario').style.display = 'block';
+            cargarDiario();
+            cargarNewFrase();
+            cargarNotaLibre();
+            window.scrollTo(0, 0);
+        }
 
-        // ✨ FUNCIONALIDAD INTERACTIVA: AHORA ES DE DESPEDIDA
-        const control = document.getElementById('controlAmor');
-        const corazonIndicador = document.getElementById('corazonIndicador');
-        const mensajeIndicador = document.getElementById('mensajeIndicador');
-        const cosaExtra = document.getElementById('cosaExtra');
+        function irAlCalendario() {
+            ocultarTodasLasVistas();
+            document.getElementById('vista-calendario').style.display = 'block';
+            inicializarCalendarioEspecial();
+            window.scrollTo(0, 0);
+        }
 
-        // 📜 MENSAJES NUEVOS: DE DESPEDIDA, RECUERDOS Y AGRADECIMIENTO
-        const datosInteractivos = [
-            {
-                mensaje: "Aquí empieza todo lo que te quiero decir al despedirme...",
-                extra: " Gracias por haber llegado a mi vida"
-            },
-            {
-                mensaje: "Cada recuerdo queda guardado aquí, intacto y bonito",
-                extra: " Lo vivido nadie lo borra"
-            },
-            {
-                mensaje: "Me voy tranquilo porque sé que lo hicimos bien",
-                extra: "Fuiste lo más bonito que me pasó"
-            },
-            {
-                mensaje: "Te deseo todo lo bueno que te mereces, y es mucho",
-                extra: " Que seas muy feliz, siempre"
-            },
-            {
-                mensaje: "Aunque caminemos por rumbos distintos, te llevo conmigo",
-                extra: "Un abrazo eterno y con cariño"
-            },
-            {
-                mensaje: "Adiós no es olvido, es solo un hasta luego en el recuerdo",
-                extra: " Gracias por cada momento"
-            },
-            {
-                mensaje: "Este corazón creció contigo, y se queda con lo mejor de ti",
-                extra: "Siempre serás especial para mí"
-            },
-            {
-                mensaje: "Te dejo en paz y te dejo todo mi cariño",
-                extra: " Lo bonito queda para siempre"
-            },
-            {
-                mensaje: "Gracias por todo lo bonito",
-                extra: " Sé feliz"
-            },
-            {
-                mensaje: "Y al final de todo... gracias, y adiós con todo mi corazón",
-                extra: "💖 Te deseo lo mejor de todo corazón"
-            }
+        function volverAlPrincipal() {
+            ocultarTodasLasVistas();
+            document.getElementById('vista-principal').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        // ========== FRASES MOTIVACIONALES ==========
+        const frases = [
+            { texto: "Los grandes logros no se conquistan en un día, sino en miles de pequeños momentos de coraje.", autor: "La vida misma" },
+            { texto: "Tu salud mental es tan importante como tu salud física. Respira, date tiempo, eres suficiente.", autor: "Verdad universal" },
+            { texto: "No importa cuántas veces caigas, lo que importa es cuántas veces te levantes. Ese es tu poder.", autor: "Tu fuerza interior" },
+            { texto: "Cada día es una nueva oportunidad para ser mejor que ayer. No para ser perfecta, sino mejor.", autor: "El progreso" },
+            { texto: "Tus sueños son válidos. Tu lucha es válida. Tu existencia es válida. Nunca lo olvides.", autor: "Alguien que te ama" },
+            { texto: "La salud mental no es lujo, es necesidad. Cuidarte es un acto de amor contigo misma.", autor: "Tu bienestar" },
+            { texto: "Eres más fuerte de lo que crees. Ya has superado el 100% de tus peores días.", autor: "Las estadísticas" },
+            { texto: "No se trata de no tener miedo, se trata de seguir adelante a pesar del miedo.", autor: "La valentía" },
+            { texto: "Mereces paz. Mereces salud. Mereces todas las cosas bonitas que sueñas. Empieza a creerlo.", autor: "Verdad absoluta" },
+            { texto: "Cada ciclo cerrado es un aprendizaje. Cada meta alcanzada es una victoria. Celebra cada paso.", autor: "Tu progreso" },
+            { texto: "Tus días grises son temporales. El sol volverá a brillar para ti, lo promete el universo.", autor: "La esperanza" },
+            { texto: "No tienes que serlo todo para todos. Solo sé auténtica, y eso será más que suficiente.", autor: "La verdad" },
+            { texto: "Escúchate. Tu intuición sabe exactamente qué necesitas. Confía en tu sabiduría interna.", autor: "Tu voz interior" },
+            { texto: "El cambio toma tiempo. Sé paciente contigo. Estás exactamente donde necesitas estar.", autor: "El universo" },
+            { texto: "Tus sueños no tienen límite de fecha. Siempre es tiempo para comenzar, siempre es tiempo para soñar.", autor: "La persistencia" },
+            { texto: "Hoy no tienes que tener todas las respuestas. Solo da el siguiente paso pequeño, eso ya es suficiente.", autor: "El presente" },
+            { texto: "Florece a tu propio ritmo. Ninguna flor se apresura y aun así el jardín siempre se ve hermoso.", autor: "La naturaleza" },
+            { texto: "Lo que sientes hoy no define quién serás mañana. Eres siempre un proyecto en constante crecimiento.", autor: "Tu evolución" },
+            { texto: "Permítete descansar sin culpa. Hasta la tierra más fértil necesita una temporada de quietud.", autor: "El descanso" },
+            { texto: "Cada cicatriz que llevas es prueba de que sobreviviste a algo que pensaste que no podrías.", autor: "Tu historia" },
+            { texto: "No compares tu capítulo dos con el capítulo veinte de alguien más. Tu historia tiene su propio tiempo.", autor: "Tu camino" },
+            { texto: "Cuidar de ti no es egoísmo, es la base desde la cual puedes cuidar de todo lo demás.", autor: "El autocuidado" },
+            { texto: "Las tormentas pasan. Siempre han pasado. Y tú siempre, siempre, has encontrado la calma después.", autor: "La certeza" },
+            { texto: "Hoy es un buen día para agradecerte por seguir intentando, aunque nadie más lo note.", autor: "Tu constancia" },
+            { texto: "No necesitas sentirte lista para empezar. La claridad llega caminando, no esperando.", autor: "La acción" },
+            { texto: "Eres el hogar al que siempre puedes volver, incluso en los días en que te sientes perdida.", autor: "Tu refugio interior" },
+            { texto: "Pequeños actos de amor propio, repetidos todos los días, construyen una vida que se siente como un abrazo.", autor: "La rutina amable" },
+            { texto: "Tu ritmo para sanar es el correcto. No hay cronómetro ni fecha límite para estar bien.", autor: "El proceso" },
+            { texto: "Lo que hoy parece imposible, en unos meses será solo un recuerdo de lo fuerte que fuiste.", autor: "El tiempo" },
+            { texto: "Eres digna de amor en tus días buenos y también en los días en que apenas puedes levantarte.", autor: "Tu valor" },
+            { texto: "No tienes que sanar en silencio. Pedir ayuda es uno de los actos más valientes que existen.", autor: "El apoyo" },
+            { texto: "Cada respiración profunda es un recordatorio de que sigues aquí, y eso ya es un logro.", autor: "El instante presente" },
+            { texto: "Tu sensibilidad no es debilidad, es la prueba de que sigues sintiendo con todo el corazón.", autor: "Tu ternura" },
+            { texto: "Confía en los tiempos que no entiendes. A veces lo que tarda, es porque está creciendo bien.", autor: "La paciencia" },
+            { texto: "El simple hecho de intentarlo hoy ya te hace alguien admirable. No subestimes ese esfuerzo.", autor: "Tu coraje" },
+            { texto: "Hay una versión de ti, más adelante, que te lo va a agradecer por no rendirte hoy.", autor: "Tu futuro" },
+            { texto: "Date permiso de empezar de nuevo tantas veces como lo necesites. No hay límite de intentos.", autor: "Las segundas oportunidades" },
+            { texto: "Eres más que tus peores momentos y más que tus mejores logros. Eres, simplemente, suficiente.", autor: "Tu esencia" },
+            { texto: "El amor propio se construye en lo cotidiano: dormir bien, comer con calma, hablarte con dulzura.", autor: "Lo pequeño" },
+            { texto: "No estás atrasada en la vida. Estás exactamente a tiempo para la historia que estás escribiendo.", autor: "Tu propio reloj" },
+            { texto: "Cada vez que eliges seguir, eliges también a la persona fuerte en la que te estás convirtiendo.", autor: "Tu decisión" }
         ];
 
-        control.addEventListener('input', function() {
-            const valor = parseInt(this.value);
-            const etapa = Math.floor(valor / 10); // 0 a 9
+        let ultimaFraseIndex = -1;
 
-            // 📏 EL CORAZÓN SE HACE MÁS GRANDE CONFORME LO MUEVE
-            const tamano = 3 + (valor / 100) * 12; // Empieza en 3rem y llega hasta 15rem
-            corazonIndicador.style.fontSize = `${tamano}rem`;
+        function cargarNewFrase() {
+            let indice;
+            do {
+                indice = Math.floor(Math.random() * frases.length);
+            } while (indice === ultimaFraseIndex && frases.length > 1);
+            ultimaFraseIndex = indice;
 
-            // Cambiar color y brillo
-            if(valor > 0) {
-                corazonIndicador.classList.add('lleno');
-            } else {
-                corazonIndicador.classList.remove('lleno');
+            const frase = frases[indice];
+            const elementoFrase = document.getElementById('fraseMotivacional');
+            elementoFrase.style.opacity = '0';
+            setTimeout(() => {
+                elementoFrase.textContent = `"${frase.texto}"`;
+                document.getElementById('autorFrase').textContent = `— ${frase.autor}`;
+                elementoFrase.style.transition = 'opacity 0.5s ease';
+                elementoFrase.style.opacity = '1';
+            }, 200);
+        }
+
+        // ========== NOTA LIBRE (ESPACIO PERSONAL) ==========
+        let timeoutNotaLibre = null;
+
+        async function cargarNotaLibre() {
+            try {
+                const resultado = await window.storage.get('nota_libre');
+                const textarea = document.getElementById('notaLibreTexto');
+                const estado = document.getElementById('notaLibreEstado');
+                if (resultado && resultado.value) {
+                    const datos = JSON.parse(resultado.value);
+                    textarea.value = datos.texto || '';
+                    if (datos.texto && datos.texto.trim()) {
+                        const fecha = new Date(datos.fechaGuardado);
+                        estado.textContent = `Guardado el ${fecha.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} a las ${fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`;
+                    } else {
+                        estado.textContent = 'Aún no has escrito nada aquí.';
+                    }
+                } else {
+                    textarea.value = '';
+                    estado.textContent = 'Aún no has escrito nada aquí.';
+                }
+            } catch (error) {
+                console.log('No hay nota libre guardada aún');
+            }
+        }
+
+        async function guardarNotaLibre() {
+            const texto = document.getElementById('notaLibreTexto').value;
+            const estado = document.getElementById('notaLibreEstado');
+
+            try {
+                const datos = { texto: texto, fechaGuardado: new Date().toISOString() };
+                await window.storage.set('nota_libre', JSON.stringify(datos));
+
+                if (texto.trim()) {
+                    estado.textContent = '✓ Guardado justo ahora';
+                } else {
+                    estado.textContent = 'Aún no has escrito nada aquí.';
+                }
+            } catch (error) {
+                console.error('Error al guardar la nota libre:', error);
+                estado.textContent = 'No se pudo guardar. Intenta de nuevo.';
+            }
+        }
+
+        // ========== CALENDARIO ESPECIAL (11 DE ENERO) ==========
+        const mensajesFelicitacion = [
+            { texto: "Feliz 11 de enero. Otro año más en el que este pequeño rincón se despierta solo para decirte: eres maravillosa.", detalle: "Que este nuevo ciclo te traiga calma, sueños cumplidos y muchas razones para sonreír." },
+            { texto: "Hoy es ese día especial. Sin importar cuánto tiempo pase, este mensaje seguirá llegando, año tras año, para ti.", detalle: "Espero que estés rodeada de las cosas que amas y de la paz que mereces." },
+            { texto: "Otro 11 de enero, otra vuelta al sol. Y aquí sigue este recordatorio fiel de lo especial que eres.", detalle: "Que la vida te siga regalando motivos para celebrar quién eres y quién te estás convirtiendo." },
+            { texto: "Hoy se enciende esta página, igual que cada año, solo para celebrarte a ti.", detalle: "Ojalá este año esté lleno de salud, risas sinceras y momentos que valga la pena recordar." },
+            { texto: "El calendario marcó la fecha, y este espacio cumplió su promesa: aquí está tu felicitación de cada año.", detalle: "Sigue brillando exactamente como lo haces, hoy y todos los días que vengan." },
+            { texto: "11 de enero otra vez. El tiempo pasa, los años cambian, pero este mensaje siempre vuelve a ti.", detalle: "Celebra lo lejos que has llegado y todo lo bueno que aún te espera por delante." }
+        ];
+
+        let vistaPreviaActiva = false;
+
+        function generarMiniCalendario(diaResaltado) {
+            const contenedor = document.getElementById('calendarioMiniDias');
+            const diasSemana = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+            const anioActual = new Date().getFullYear();
+            const primerDiaSemana = (new Date(anioActual, 0, 1).getDay() + 6) % 7;
+
+            let html = diasSemana.map(d => `<div class="mini-dia" style="font-weight:700; color: var(--oro); background:transparent;">${d}</div>`).join('');
+
+            for (let i = 0; i < primerDiaSemana; i++) {
+                html += `<div class="mini-dia vacio"></div>`;
             }
 
-            // 📝 CAMBIAR MENSAJE DE DESPEDIDA
-            if(etapa >= 0 && etapa < datosInteractivos.length) {
-                mensajeIndicador.textContent = datosInteractivos[etapa].mensaje;
-                
-                // Mostrar la frase extra con animación
-                cosaExtra.classList.remove('mostrar');
+            for (let dia = 1; dia <= 31; dia++) {
+                const esElDia = dia === diaResaltado;
+                html += `<div class="mini-dia ${esElDia ? 'es-11' : ''}">${dia}</div>`;
+            }
+
+            contenedor.innerHTML = html;
+        }
+
+        function inicializarCalendarioEspecial() {
+            generarMiniCalendario(11);
+            vistaPreviaActiva = false;
+            document.getElementById('avisoPrevia').style.display = 'none';
+            document.getElementById('botonVistaPrevia').textContent = ' Ver cómo se vería (vista previa)';
+            renderizarEstadoCalendario();
+        }
+
+        function esOnceDeEnero(fecha) {
+            return fecha.getMonth() === 0 && fecha.getDate() === 11;
+        }
+
+        function renderizarEstadoCalendario(forzarDesbloqueo = false) {
+            const ahora = new Date();
+            const esHoyElDia = esOnceDeEnero(ahora);
+            const numero = document.getElementById('calendarioNumero');
+            const candado = document.getElementById('calendarioCandado');
+            const estado = document.getElementById('calendarioEstado');
+            const cuenta = document.getElementById('calendarioCuenta');
+            const mensajeBox = document.getElementById('mensajeFelicitacion');
+            const textoFelicitacion = document.getElementById('textoFelicitacion');
+            const detalleFelicitacion = document.getElementById('detalleFelicitacion');
+
+            if (esHoyElDia || forzarDesbloqueo) {
+                numero.classList.add('desbloqueado');
+                candado.textContent = '🔓';
+                estado.textContent = forzarDesbloqueo && !esHoyElDia
+                    ? 'Vista previa: así se vería si hoy fuera 11 de enero.'
+                    : '¡Hoy es tu día! Este mensaje vuelve a aparecer cada año, exactamente hoy.';
+
+                const anio = ahora.getFullYear();
+                const mensaje = mensajesFelicitacion[anio % mensajesFelicitacion.length];
+                textoFelicitacion.textContent = mensaje.texto;
+                detalleFelicitacion.textContent = mensaje.detalle;
+                mensajeBox.classList.add('visible');
+                cuenta.textContent = '';
+
+                if (esHoyElDia && !forzarDesbloqueo) {
+                    lanzarConfeti();
+                }
+            } else {
+                numero.classList.remove('desbloqueado');
+                candado.textContent = '🔒';
+                estado.textContent = 'Este mensaje solo se desbloquea el 11 de enero de cada año.';
+                mensajeBox.classList.remove('visible');
+
+                const proximoOnce = new Date(ahora.getFullYear(), 0, 11);
+                if (ahora > proximoOnce) {
+                    proximoOnce.setFullYear(ahora.getFullYear() + 1);
+                }
+                const msPorDia = 1000 * 60 * 60 * 24;
+                const diasRestantes = Math.ceil((proximoOnce - ahora) / msPorDia);
+                cuenta.textContent = `Faltan ${diasRestantes} día${diasRestantes === 1 ? '' : 's'}`;
+            }
+        }
+
+        function alternarVistaPrevia() {
+            vistaPreviaActiva = !vistaPreviaActiva;
+            const aviso = document.getElementById('avisoPrevia');
+            const boton = document.getElementById('botonVistaPrevia');
+
+            if (vistaPreviaActiva) {
+                aviso.style.display = 'block';
+                boton.textContent = '✕ Salir de la vista previa';
+                renderizarEstadoCalendario(true);
+            } else {
+                aviso.style.display = 'none';
+                boton.textContent = ' Ver cómo se vería (vista previa)';
+                renderizarEstadoCalendario(false);
+            }
+        }
+
+        function lanzarConfeti() {
+            for (let i = 0; i < 40; i++) {
+                const particula = document.createElement('div');
+                particula.textContent = ['💛', '✨', '🎉', '💖'][Math.floor(Math.random() * 4)];
+                particula.style.position = 'fixed';
+                particula.style.left = Math.random() * 100 + 'vw';
+                particula.style.top = '-40px';
+                particula.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+                particula.style.zIndex = '2000';
+                particula.style.pointerEvents = 'none';
+                particula.style.transition = `transform ${2 + Math.random() * 2}s linear, opacity 0.5s ease`;
+                document.body.appendChild(particula);
+
                 setTimeout(() => {
-                    cosaExtra.textContent = datosInteractivos[etapa].extra;
-                    cosaExtra.classList.add('mostrar');
-                }, 150);
-            }
+                    particula.style.transform = `translateY(${window.innerHeight + 80}px) rotate(${Math.random() * 720}deg)`;
+                }, 30);
 
-            // 💓 EFECTO ESPECIAL AL LLEGAR AL FINAL
-            if(valor >= 95) {
-                corazonIndicador.style.animation = 'latidoFuerte 0.8s infinite alternate';
-                mensajeIndicador.style.fontSize = '1.4rem';
-                mensajeIndicador.style.color = '#ff4d6d';
-                cosaExtra.style.fontSize = '1.8rem';
-            } else {
-                corazonIndicador.style.animation = 'none';
-                mensajeIndicador.style.fontSize = '1.1rem';
-                mensajeIndicador.style.color = 'var(--color-destacado)';
-                cosaExtra.style.fontSize = '1.3rem';
+                setTimeout(() => {
+                    particula.style.opacity = '0';
+                }, 3500);
+
+                setTimeout(() => particula.remove(), 4200);
             }
+        }
+
+        // ========== DIARIO INTERACTIVO ==========
+        let temaSeleccionado = 'Sueño';
+        let entradaActualId = null;
+
+        function seleccionarTema(btn, tema) {
+            document.querySelectorAll('.tema-opcion').forEach(b => b.classList.remove('activo'));
+            btn.classList.add('activo');
+            temaSeleccionado = tema;
+        }
+
+        // Configurar fecha actual
+        document.getElementById('entradaFecha').valueAsDate = new Date();
+        document.getElementById('entradaTexto').addEventListener('input', (e) => {
+            document.getElementById('contadorChars').textContent = e.target.value.length;
         });
 
+        async function guardarEntrada() {
+            const fecha = document.getElementById('entradaFecha').value;
+            const texto = document.getElementById('entradaTexto').value;
+
+            if (!texto.trim()) {
+                alert('Por favor escribe algo en tu entrada');
+                return;
+            }
+
+            if (!fecha) {
+                alert('Por favor selecciona una fecha');
+                return;
+            }
+
+            try {
+                const entrada = {
+                    id: entradaActualId || Date.now().toString(),
+                    fecha: fecha,
+                    tema: temaSeleccionado,
+                    texto: texto,
+                    caracteres: texto.length,
+                    fechaCreacion: new Date().toISOString()
+                };
+
+                const clave = 'entrada_' + entrada.id;
+                await window.storage.set(clave, JSON.stringify(entrada));
+
+                document.getElementById('entradaTexto').value = '';
+                document.getElementById('entradaFecha').valueAsDate = new Date();
+                document.getElementById('contadorChars').textContent = '0';
+                entradaActualId = null;
+
+                mostrarMensajeExito();
+                cargarDiario();
+            } catch (error) {
+                console.error('Error al guardar:', error);
+                alert('Error al guardar la entrada');
+            }
+        }
+
+        async function cargarDiario() {
+            try {
+                const resultado = await window.storage.list('entrada_');
+                const entradas = [];
+
+                if (resultado && resultado.keys) {
+                    for (const clave of resultado.keys) {
+                        const datosStr = await window.storage.get(clave);
+                        if (datosStr && datosStr.value) {
+                            entradas.push(JSON.parse(datosStr.value));
+                        }
+                    }
+                }
+
+                entradas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+                actualizarEstadisticas(entradas);
+                mostrarEntradas(entradas);
+            } catch (error) {
+                console.log('No hay entradas aún o error al cargar');
+            }
+        }
+
+        function actualizarEstadisticas(entradas) {
+            document.getElementById('stat-entradas').textContent = entradas.length;
+
+            const totalCaracteres = entradas.reduce((sum, e) => sum + e.caracteres, 0);
+            const totalPalabras = Math.floor(totalCaracteres / 5);
+            document.getElementById('stat-caracteres').textContent = totalPalabras;
+
+            if (entradas.length > 0) {
+                const fechas = new Set(entradas.map(e => e.fecha));
+                document.getElementById('stat-dias').textContent = fechas.size;
+            }
+        }
+
+        function mostrarEntradas(entradas) {
+            const contenedor = document.getElementById('listaEntradas');
+
+            if (entradas.length === 0) {
+                contenedor.innerHTML = '<p style="color: var(--texto-claro); text-align: center; padding: 2rem;">No tienes entradas aún. ¡Empieza a escribir tu historia hoy!</p>';
+                return;
+            }
+
+            contenedor.innerHTML = entradas.map(entrada => `
+                <div class="entrada-item" onclick="abrirEntrada('${entrada.id}')">
+                    <div class="entrada-fecha">${new Date(entrada.fecha).toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                    <div class="entrada-tema">${getEmojiTema(entrada.tema)} ${entrada.tema}</div>
+                    <div class="entrada-preview">${entrada.texto.substring(0, 100)}${entrada.texto.length > 100 ? '...' : ''}</div>
+                    <div class="entrada-caracteres">${Math.floor(entrada.caracteres / 5)} palabras • ${entrada.caracteres} caracteres</div>
+                </div>
+            `).join('');
+        }
+
+        function getEmojiTema(tema) {
+            const emojis = {
+                'Sueño': '',
+                'Meta': '',
+                'Reflexión': '',
+                'Gratitud': '',
+                'Salud': '',
+                'Sanación': ''
+            };
+            return emojis[tema] || '';
+        }
+
+        async function abrirEntrada(id) {
+            try {
+                const datosStr = await window.storage.get('entrada_' + id);
+                if (datosStr && datosStr.value) {
+                    const entrada = JSON.parse(datosStr.value);
+                    entradaActualId = id;
+
+                    document.getElementById('modalFecha').textContent = new Date(entrada.fecha).toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    document.getElementById('modalTema').textContent = getEmojiTema(entrada.tema) + ' ' + entrada.tema;
+                    document.getElementById('modalTexto').textContent = entrada.texto;
+                    document.getElementById('modalEntrada').classList.add('activo');
+                }
+            } catch (error) {
+                console.error('Error al abrir entrada:', error);
+            }
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalEntrada').classList.remove('activo');
+            entradaActualId = null;
+        }
+
+        function editarEntrada() {
+            if (!entradaActualId) return;
+
+            window.storage.get('entrada_' + entradaActualId).then(datosStr => {
+                if (datosStr && datosStr.value) {
+                    const entrada = JSON.parse(datosStr.value);
+                    document.getElementById('entradaFecha').value = entrada.fecha;
+                    document.getElementById('entradaTexto').value = entrada.texto;
+                    document.getElementById('contadorChars').textContent = entrada.texto.length;
+                    temaSeleccionado = entrada.tema;
+                    
+                    document.querySelectorAll('.tema-opcion').forEach(b => {
+                        b.classList.toggle('activo', b.textContent.includes(entrada.tema));
+                    });
+
+                    cerrarModal();
+                    document.querySelector('.seccion-escribir').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+
+        async function eliminarEntrada() {
+            if (!entradaActualId || !confirm('¿Seguro que quieres eliminar esta entrada?')) return;
+
+            try {
+                await window.storage.delete('entrada_' + entradaActualId);
+                cerrarModal();
+                cargarDiario();
+                mostrarMensajeExito('Entrada eliminada');
+            } catch (error) {
+                console.error('Error al eliminar:', error);
+            }
+        }
+
+        function mostrarMensajeExito(mensaje = '✓ ¡Entrada guardada con éxito!') {
+            const msg = document.getElementById('mensajeExito');
+            msg.textContent = mensaje;
+            msg.classList.remove('oculto');
+            setTimeout(() => msg.classList.add('oculto'), 3000);
+        }
+
+        function scrollTo(selector) {
+            const elemento = document.querySelector(selector);
+            if (elemento) {
+                elemento.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // ========== EFECTO 3D AL MOVER EL MOUSE (TILT) ==========
+        function activarTilt3D() {
+            document.querySelectorAll('.tilt-3d').forEach(elemento => {
+                elemento.addEventListener('mousemove', (e) => {
+                    const rect = elemento.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centroX = rect.width / 2;
+                    const centroY = rect.height / 2;
+                    const rotX = ((y - centroY) / centroY) * -6;
+                    const rotY = ((x - centroX) / centroX) * 6;
+                    elemento.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(10px)`;
+                });
+
+                elemento.addEventListener('mouseleave', () => {
+                    elemento.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+                });
+            });
+        }
+
+        // Inicializar
+        window.addEventListener('load', () => {
+            initThreeJS();
+            activarTilt3D();
+        });
     </script>
 </body>
 </html>
